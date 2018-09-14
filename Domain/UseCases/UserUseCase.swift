@@ -7,7 +7,13 @@
 //
 
 import UIKit
+import RxSwift
 
-class UserUseCase: NSObject {
-
+public protocol UserUseCase {
+    func login(login: Login) -> Observable<[User]>
+    func checkUser(user: CheckUser) -> Observable<[User]>
+    func user(userId: String) -> Observable<User>
+    func register(user: User) -> Observable<User>
+    func delete(user: User) -> Observable<Void>
+    func update(user: User) -> Observable<User>
 }

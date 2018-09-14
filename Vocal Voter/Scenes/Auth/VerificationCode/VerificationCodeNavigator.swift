@@ -7,29 +7,41 @@
 //
 
 import UIKit
+import Domain
 
-class VerificationCodeNavigator: UIViewController {
+protocol VerificationCodeNavigator {
+    func toVerificationCode(param: ForgotPassword)
+    func back()
+    func toResetPassword(param: ForgotPassword)
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+final class DefaultVerificationCodeNavigator: VerificationCodeNavigator {
+    private let navigationController: UINavigationController
+    private let services: UseCaseProvider
+    private let storyBoard: UIStoryboard
+    
+    init(services: UseCaseProvider,
+         navigationController: UINavigationController,
+         storyBoard: UIStoryboard) {
+        self.storyBoard = storyBoard
+        self.services = services
+        self.navigationController = navigationController
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func back() {
+        navigationController.popViewController(animated: true)
     }
-    */
-
+    
+    func toVerificationCode(param: ForgotPassword) {
+        let viewModel = VerificationCodeViewModel(useCase: services.makeForgotPasswordUseCase(), navigator: self, param: param)
+        let vc = storyBoard.instantiateViewController(ofType: VerificationCodeViewController.self)
+        vc.viewModel = viewModel
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func toResetPassword(param: ForgotPassword) {
+        let navigator = DefaultResetPasswordNavigator(services: services, navigationController: navigationController, storyBoard: storyBoard)
+        navigator.toResetPassword(param: param)
+    }
 }
+

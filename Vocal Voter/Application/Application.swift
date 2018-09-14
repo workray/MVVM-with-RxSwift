@@ -9,47 +9,28 @@
 import Foundation
 import Domain
 import NetworkPlatform
-import RealmPlatform
 
 final class Application {
     static let shared = Application()
     
-    private let realmUseCaseProvider: Domain.UseCaseProvider
     private let networkUseCaseProvider: Domain.UseCaseProvider
     
     private init() {
-        self.realmUseCaseProvider = RealmPlatform.UseCaseProvider()
         self.networkUseCaseProvider = NetworkPlatform.UseCaseProvider()
     }
     
     func configureMainInterface(in window: UIWindow) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "Auth", bundle: nil)
         
-        let rmNavigationController = UINavigationController()
-        rmNavigationController.tabBarItem = UITabBarItem(title: "Realm",
-                                                         image: UIImage(named: "Toolbox"),
-                                                         selectedImage: nil)
-        let rmNavigator = DefaultPostsNavigator(services: realmUseCaseProvider,
-                                                navigationController: rmNavigationController,
-                                                storyBoard: storyboard)
-        
-        let networkNavigationController = UINavigationController()
-        networkNavigationController.tabBarItem = UITabBarItem(title: "Network",
-                                                              image: UIImage(named: "Toolbox"),
-                                                              selectedImage: nil)
-        let networkNavigator = DefaultPostsNavigator(services: networkUseCaseProvider,
-                                                     navigationController: networkNavigationController,
+        let authNavigationController = UINavigationController()
+        authNavigationController.isNavigationBarHidden = true
+        let authNavigator = DefaultLoginNavigator(services: networkUseCaseProvider,
+                                                     navigationController: authNavigationController,
                                                      storyBoard: storyboard)
         
-        let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [
-            rmNavigationController,
-            networkNavigationController
-        ]
-        window.rootViewController = tabBarController
+        window.rootViewController = authNavigationController
         
-        rmNavigator.toPosts()
-        networkNavigator.toPosts()
+        authNavigator.toLogin()
     }
 }
 

@@ -134,8 +134,8 @@ open class SwiftyCamButton: UIButton {
     
     fileprivate func createGestureRecognizers() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(SwiftyCamButton.Tap))
-        let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(SwiftyCamButton.LongPress))
+//        let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(SwiftyCamButton.LongPress))
         self.addGestureRecognizer(tapGesture)
-        self.addGestureRecognizer(longGesture)
+//        self.addGestureRecognizer(longGesture)
     }
 }

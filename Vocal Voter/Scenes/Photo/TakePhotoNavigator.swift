@@ -7,29 +7,51 @@
 //
 
 import UIKit
+import RxSwift
 
-class TakePhotoNavigator: UIViewController {
+protocol TakePhotoNavigator {
+    func close()
+    func toTakePhoto()
+    func didTakePhoto(_ image: UIImage)
+    func toPickFromLibrary()
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+final class DefaultTakePhotoNavigator: TakePhotoNavigator {
+    private let navigationController: UINavigationController
+    private let imageSubject:PublishSubject<UIImage>
+    private let isAvatar: Bool
+    
+    init(navigationController: UINavigationController,
+         imageSubject: PublishSubject<UIImage>,
+         isAvatar: Bool = true) {
+        self.navigationController = navigationController
+        self.imageSubject = imageSubject
+        self.isAvatar = isAvatar
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func close() {
+        navigationController.dismiss(animated: true, completion: nil)
     }
-    */
-
+    
+    func toTakePhoto() {
+        let takePhotoVc = TakePhotoViewController(nibName: "TakePhotoViewController", bundle: nil)
+        takePhotoVc.viewModel = TakePhotoViewModel(navigator: self)
+        takePhotoVc.isAvatar = isAvatar
+        navigationController.pushViewController(takePhotoVc, animated: false)
+    }
+    
+    func didTakePhoto(_ image: UIImage) {
+        if isAvatar {
+            let cropNavigator = DefaultCropAvatarPhotoNavigator(navigationController: navigationController)
+            cropNavigator.toCropPhoto(image: image, imageSubject: imageSubject)
+        }
+        else {
+            imageSubject.onNext(image)
+            close()
+        }
+    }
+    
+    func toPickFromLibrary() {
+        
+    }
 }

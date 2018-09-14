@@ -6,8 +6,26 @@
 //  Copyright © 2018 Mobdev125. All rights reserved.
 //
 
-import UIKit
-
-class Profile: NSObject {
-
+public struct Profile {
+    public var user: User
+    public var userPhoto: UIImage?
+    public var verificationPhoto: UIImage?
+    
+    public init() {
+        self.init(user: User())
+    }
+    
+    public init(user: User) {
+        self.init(user: user, userPhoto: nil, verificationPhoto: nil)
+    }
+    
+    public init(user: User, userPhoto: UIImage?) {
+        self.init(user: user, userPhoto: userPhoto, verificationPhoto: nil)
+    }
+    
+    public init(user: User, userPhoto: UIImage?, verificationPhoto: UIImage?) {
+        self.user = user
+        self.userPhoto = userPhoto
+        self.verificationPhoto = verificationPhoto
+    }
 }

@@ -6,30 +6,81 @@
 //  Copyright © 2018 Mobdev125. All rights reserved.
 //
 
-import UIKit
+import Domain
+import RxSwift
+import RxCocoa
 
-class ForgotPasswordViewModel: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+final class ForgotPasswordViewModel: ViewModelType {
+    
+    private let useCase: ForgotPasswordUseCase
+    private let navigator: ForgotPasswordNavigator
+    
+    init(useCase: ForgotPasswordUseCase, navigator: ForgotPasswordNavigator) {
+        self.navigator = navigator
+        self.useCase = useCase
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func transform(input: Input) -> Output {
+        let back = input.backTrigger
+            .do(onNext: navigator.toLogin)
+        let register = input.registerTrigger
+            .do(onNext: navigator.toRegister)
+        
+        let param = input.email.map { ForgotPassword(email: $0) }
+        
+        let activityIndicator = ActivityIndicator()
+        let errorTracker = ErrorTracker()
+        let sendEmail = input.sendEmailTrigger
+            .filter{ $0 }
+            .withLatestFrom(param)
+            .flatMapLatest { [unowned self] in
+                return self.useCase.sendEmail(params: $0)
+                    .trackActivity(activityIndicator)
+                    .trackError(errorTracker)
+                    .asDriverOnErrorJustComplete()
+            }
+        let next = sendEmail
+            .filter{$0.result == SUCCESS}
+            .withLatestFrom(param)
+            .flatMapLatest { [unowned self] in
+                return Driver.just(self.navigator.toVerificationCode(params: $0))
+        }
+        let haveAlreadyVerificationCode = input.haveAlreadyVerificationCodeTrigger
+            .filter{ $0 }
+            .withLatestFrom(param)
+            .flatMapLatest { [unowned self] in
+                return Driver.just(self.navigator.toVerificationCode(params: $0))
+        }
+        return Output(back: back,
+                      sendEmail: sendEmail,
+                      next: next,
+                      register: register,
+                      haveAlreadyVerificationCode: haveAlreadyVerificationCode,
+                      error: errorTracker.asDriver(),
+                      activityIndicator: activityIndicator.asDriver()
+        )
     }
-    */
-
 }
+
+extension ForgotPasswordViewModel {
+    struct Input {
+        let backTrigger: Driver<Void>
+        let sendEmailTrigger: Driver<Bool>
+        let registerTrigger: Driver<Void>
+        let haveAlreadyVerificationCodeTrigger: Driver<Bool>
+        
+        let email: Driver<String>
+    }
+    
+    struct Output {
+        let back: Driver<Void>
+        let sendEmail: Driver<Result>
+        let next: Driver<Void>
+        let register: Driver<Void>
+        let haveAlreadyVerificationCode: Driver<Void>
+        
+        let error: Driver<Error>
+        let activityIndicator: Driver<Bool>
+    }
+}
+

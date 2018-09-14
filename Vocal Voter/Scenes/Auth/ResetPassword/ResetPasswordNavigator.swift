@@ -7,29 +7,40 @@
 //
 
 import UIKit
+import Domain
 
-class ResetPasswordNavigator: UIViewController {
+protocol ResetPasswordNavigator {
+    func toResetPassword(param: ForgotPassword)
+    func back()
+    func toLogin()
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+final class DefaultResetPasswordNavigator: ResetPasswordNavigator {
+    private let navigationController: UINavigationController
+    private let services: UseCaseProvider
+    private let storyBoard: UIStoryboard
+    
+    init(services: UseCaseProvider,
+         navigationController: UINavigationController,
+         storyBoard: UIStoryboard) {
+        self.storyBoard = storyBoard
+        self.services = services
+        self.navigationController = navigationController
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func back() {
+        navigationController.popViewController(animated: true)
     }
-    */
-
+    
+    func toResetPassword(param: ForgotPassword) {
+        let viewModel = ResetPasswordViewModel(useCase: services.makeForgotPasswordUseCase(), navigator: self, param: param)
+        let vc = storyBoard.instantiateViewController(ofType: ResetPasswordViewController.self)
+        vc.viewModel = viewModel
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func toLogin() {
+        navigationController.popToRootViewController(animated: true)
+    }
 }
+

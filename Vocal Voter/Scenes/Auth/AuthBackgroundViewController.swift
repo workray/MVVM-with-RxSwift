@@ -8,32 +8,24 @@
 
 import UIKit
 
-class AuthViewController: UIViewController {
-
-    @IBOutlet weak var backgroundImageView: UIImageView!
-    @IBOutlet weak var backgroundOverlayView: UIView!
-    @IBOutlet weak var visualEffectView: UIVisualEffectView!
+class AuthBackgroundViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        setupBackground()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func setupBackground() {
+        let backgroundImageView = UIImageView(frame: self.view.bounds)
+        backgroundImageView.image = UIImage(named: "bg.jpg")
+        self.view.insertSubview(backgroundImageView, at: 0)
+        backgroundImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        let visualEffectView = UIVisualEffectView(frame: self.view.bounds)
+        visualEffectView.effect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        self.view.insertSubview(visualEffectView, at: 1)
+        visualEffectView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

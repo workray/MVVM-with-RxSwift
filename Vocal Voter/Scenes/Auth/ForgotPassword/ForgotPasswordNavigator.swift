@@ -7,29 +7,47 @@
 //
 
 import UIKit
+import Domain
 
-class ForgotPasswordNavigator: UIViewController {
+protocol ForgotPasswordNavigator {
+    func toForgotPassword()
+    func toLogin()
+    func toRegister()
+    func toVerificationCode(params: ForgotPassword)
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+final class DefaultForgotPasswordNavigator: ForgotPasswordNavigator {
+    private let navigationController: UINavigationController
+    private let services: UseCaseProvider
+    private let storyBoard: UIStoryboard
+    
+    init(services: UseCaseProvider,
+         navigationController: UINavigationController,
+         storyBoard: UIStoryboard) {
+        self.storyBoard = storyBoard
+        self.services = services
+        self.navigationController = navigationController
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func toLogin() {
+        navigationController.popViewController(animated: true)
     }
-    */
-
+    
+    func toForgotPassword() {
+        let viewModel = ForgotPasswordViewModel(useCase: services.makeForgotPasswordUseCase(), navigator: self)
+        let vc = storyBoard.instantiateViewController(ofType: ForgotPasswordViewController.self)
+        vc.viewModel = viewModel
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func toRegister() {
+        let navigator = DefaultRegisterNavigator(services: services, navigationController: navigationController, storyBoard: storyBoard)
+        navigator.toRegister()
+    }
+    
+    func toVerificationCode(params: ForgotPassword) {
+        let navigator = DefaultVerificationCodeNavigator(services: services, navigationController: navigationController, storyBoard: storyBoard)
+        navigator.toVerificationCode(param: params)
+    }
 }
+

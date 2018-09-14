@@ -9,5 +9,7 @@
 import Foundation
 
 public protocol UseCaseProvider {
-    func makePostsUseCase() -> PostsUseCase
+    func makeUserUseCase() -> UserUseCase
+    func makeImageUseCase() -> ImageUseCase
+    func makeForgotPasswordUseCase() -> ForgotPasswordUseCase
 }

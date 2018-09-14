@@ -6,30 +6,44 @@
 //  Copyright © 2018 Mobdev125. All rights reserved.
 //
 
-import UIKit
+import RxSwift
+import RxCocoa
 
-class PhotoCropAvatarViewModelViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+class CropAvatarPhotoViewModel: ViewModelType {
+    
+    private let navigator: CropAvatarPhotoNavigator
+    
+    init(navigator: CropAvatarPhotoNavigator) {
+        self.navigator = navigator
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func transform(input: Input) -> Output {
+        let close = input.closeTrigger
+            .do(onNext: navigator.close)
+        let back = input.backTrigger
+            .do(onNext: navigator.back)
+        let image = input.imageTrigger.do(onNext: { (image) in
+            self.navigator.didCroppedPhoto(image)
+        })
+        return Output(close: close,
+                      back: back,
+                      crop: input.cropTrigger,
+                      cropPhoto: image)
     }
-    */
+}
 
+extension CropAvatarPhotoViewModel {
+    struct Input {
+        let closeTrigger: Driver<Void>
+        let backTrigger: Driver<Void>
+        let cropTrigger: Driver<Void>
+        let imageTrigger: Driver<UIImage>
+    }
+    
+    struct Output {
+        let close: Driver<Void>
+        let back: Driver<Void>
+        let crop: Driver<Void>
+        let cropPhoto: Driver<UIImage>
+    }
 }

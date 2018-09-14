@@ -6,30 +6,33 @@
 //  Copyright © 2018 Mobdev125. All rights reserved.
 //
 
-import UIKit
+import Domain
+import RxSwift
+import RxCocoa
 
-class HomeViewModel: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+final class HomeViewModel: ViewModelType {
+    
+    private let useCase: UserUseCase
+    private let navigator: HomeNavigator
+    
+    init(useCase: UserUseCase, navigator: HomeNavigator) {
+        self.navigator = navigator
+        self.useCase = useCase
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func transform(input: Input) -> Output {
+        let logout = input.logoutTrigger
+            .do(onNext: navigator.toLogin)
+        return Output(logout: logout)
     }
-    */
+}
 
+extension HomeViewModel {
+    struct Input {
+        let logoutTrigger: Driver<Void>
+    }
+    
+    struct Output {
+        let logout: Driver<Void>
+    }
 }

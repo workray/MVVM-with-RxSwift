@@ -7,7 +7,12 @@
 //
 
 import UIKit
+import Material
 
-class BackButton: NSObject {
-
+class BackButton: RaisedButton {
+    override func prepare() {
+        super.prepare()
+        self.backgroundColor = UIColor.clear
+        self.image = Icon.cm.arrowBack?.tint(with: UIColor.white)
+    }
 }

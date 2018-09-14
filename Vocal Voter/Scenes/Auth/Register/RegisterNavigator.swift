@@ -7,29 +7,52 @@
 //
 
 import UIKit
+import Domain
+import RxSwift
 
-class RegisterNavigator: UIViewController {
+protocol RegisterNavigator {
+    func toRegister()
+    func back()
+    func toContinue()
+    func toTakePhoto(_ imageSubject: PublishSubject<UIImage>)
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+final class DefaultRegisterNavigator: RegisterNavigator {
+    private let navigationController: UINavigationController
+    private let services: UseCaseProvider
+    private let storyBoard: UIStoryboard
+    
+    init(services: UseCaseProvider,
+         navigationController: UINavigationController,
+         storyBoard: UIStoryboard) {
+        self.services = services
+        self.navigationController = navigationController
+        self.storyBoard = storyBoard
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func toRegister() {
+        let viewModel = RegisterViewModel(useCase: services.makeUserUseCase(), navigator: self)
+        let vc = storyBoard.instantiateViewController(ofType: RegisterViewController.self)
+        vc.viewModel = viewModel
+        navigationController.pushViewController(vc, animated: true)
     }
-    */
-
+    
+    func back() {
+        navigationController.popToRootViewController(animated: true)
+    }
+    
+    func toContinue() {
+        let verificationPhotoNavigator = DefaultVerificationPhotoNavigator(services: services, navigationController: navigationController, storyBoard: storyBoard)
+        verificationPhotoNavigator.toVerificationPhoto()
+    }
+    
+    func toTakePhoto(_ imageSubject: PublishSubject<UIImage>) {
+        let navigationController = UINavigationController()
+        navigationController.isNavigationBarHidden = true
+        navigationController.isToolbarHidden = true
+        let takePhotoNavigator = DefaultTakePhotoNavigator(navigationController: navigationController, imageSubject: imageSubject)
+        takePhotoNavigator.toTakePhoto()
+        
+        self.navigationController.present(navigationController, animated: true, completion: nil)
+    }
 }

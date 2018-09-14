@@ -7,13 +7,21 @@
 //
 
 import UIKit
+import Domain
+import RxSwift
+import RxCocoa
+import Material
 
 class HomeViewController: UIViewController {
-
+    private let disposeBag = DisposeBag()
+    var viewModel: HomeViewModel!
+    
+    @IBOutlet weak var logoutButton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        bindViewModel()
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,14 +30,13 @@ class HomeViewController: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    private func bindViewModel() {
+        assert(viewModel != nil)
+        
+        let input = HomeViewModel.Input(logoutTrigger: logoutButton.rx.tap.asDriver())
+        let output = viewModel.transform(input: input)
+        
+        output.logout.drive().disposed(by: disposeBag)
     }
-    */
 
 }

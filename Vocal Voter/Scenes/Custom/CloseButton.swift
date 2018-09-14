@@ -7,7 +7,13 @@
 //
 
 import UIKit
+import Material
 
-class CloseButton: NSObject {
-
+class CloseButton: RaisedButton {
+    
+    override func prepare() {
+        super.prepare()
+        self.backgroundColor = UIColor.clear
+        self.image = Icon.close?.tint(with: UIColor.white)
+    }
 }

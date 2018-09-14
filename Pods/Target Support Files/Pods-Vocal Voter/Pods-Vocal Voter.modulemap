@@ -1,0 +1,6 @@
+framework module Pods_Vocal_Voter {
+  umbrella header "Pods-Vocal Voter-umbrella.h"
+
+  export *
+  module * { export * }
+}

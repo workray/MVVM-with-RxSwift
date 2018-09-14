@@ -7,7 +7,26 @@
 //
 
 import UIKit
+import Domain
+import RxSwift
 
-class ImageUseCase: NSObject {
-
+class ImageUseCase: Domain.ImageUseCase {
+    
+    private let blob: AzureBlob
+    
+    init(blob: AzureBlob) {
+        self.blob = blob
+    }
+    
+    func uploadImage(_ blobName: String, filePath: String) -> Observable<String> {
+        return blob.uploadImageToBlobContainer(blobName, filePath: filePath)
+    }
+    
+    func uploadImage(_ blobName: String, data: Data) -> Observable<String> {
+        return blob.uploadImageToBlobContainer(blobName, data:data)
+    }
+    
+    func deleteImage(_ blobName: String) -> Observable<Void> {
+        return blob.deleteImageFromBlobContainer(blobName)
+    }
 }

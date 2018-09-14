@@ -10,43 +10,36 @@ import Foundation
 import Domain
 import RxSwift
 
-final class PostsUseCase<Cache>: Domain.PostsUseCase where Cache: AbstractCache, Cache.T == Post {
-    private let network: PostsNetwork
+final class UserUseCase<Cache>: Domain.UserUseCase where Cache: AbstractCache, Cache.T == User {
+       
+    private let network: UsersNetwork
     private let cache: Cache
     
-    init(network: PostsNetwork, cache: Cache) {
+    init(network: UsersNetwork, cache: Cache) {
         self.network = network
         self.cache = cache
     }
-    
-    func posts() -> Observable<[Post]> {
-        let fetchPosts = cache.fetchObjects().asObservable()
-        let stored = network.fetchPosts()
-            .flatMap {
-                return self.cache.save(objects: $0)
-                    .asObservable()
-                    .map(to: [Post].self)
-                    .concat(Observable.just($0))
-        }
-        
-        return fetchPosts.concat(stored)
+    func login(login: Login) -> Observable<[User]> {
+        return network.getUsers(query: NSPredicate(format: "email == %@ AND password == %@", argumentArray: [login.email, login.password]))
     }
     
-    func save(post: Post) -> Observable<Void> {
-        return network.createPost(post: post)
-            .map { _ in }
+    func checkUser(user: CheckUser) -> Observable<[User]> {
+        return network.getUsers(query: NSPredicate(format: "email == %@ OR phone == %@", argumentArray: [user.email, user.phone]))
     }
     
-    func delete(post: Post) -> Observable<Void> {
-        return network.deletePost(postId: post.uid).map({_ in})
+    func user(userId: String) -> Observable<User> {
+        return network.getUser(userId: userId)
     }
-}
-
-struct MapFromNever: Error {}
-extension ObservableType where E == Never {
-    func map<T>(to: T.Type) -> Observable<T> {
-        return self.flatMap { _ in
-            return Observable<T>.error(MapFromNever())
-        }
+    
+    func register(user: User) -> Observable<User> {
+        return network.registerUser(user: user)
+    }
+    
+    func delete(user: User) -> Observable<Void> {
+        return network.deleteUser(user: user).map({_ in})
+    }
+    
+    func update(user: User) -> Observable<User> {
+        return network.updateUser(user: user)
     }
 }

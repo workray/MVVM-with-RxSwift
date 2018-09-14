@@ -7,7 +7,31 @@
 //
 
 import UIKit
+import Domain
 
-class AppManager: NSObject {
+enum MyError: Error {
+    case existUser
+}
 
+let SUCCESS = "success"
+let FAIL = "fail"
+
+class AppManager {
+    private static var instance: AppManager?
+    static func sharedInstance() -> AppManager {
+        if instance == nil {
+            instance = AppManager()
+        }
+        return instance!
+    }
+    
+    var profile: Profile?
+    
+    private init() {
+        self.profile = Profile()
+    }
+    
+    public func logout() {
+        self.profile = Profile()
+    }
 }

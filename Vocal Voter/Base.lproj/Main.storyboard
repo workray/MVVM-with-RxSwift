@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg" translatesAutoresizingMaskIntoConstraints="NO" id="Snh-4K-Dhi">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                            <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kqf-GZ-IGv">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="uXI-33-Kep">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Kqf-GZ-IGv" secondAttribute="trailing" id="FC6-u7-Wtg"/>
+                            <constraint firstItem="Kqf-GZ-IGv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="OnM-OD-x8X"/>
+                            <constraint firstItem="Snh-4K-Dhi" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Upz-s8-73H"/>
+                            <constraint firstItem="Snh-4K-Dhi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="drf-IQ-ope"/>
+                            <constraint firstAttribute="bottom" secondItem="Snh-4K-Dhi" secondAttribute="bottom" id="jzJ-bQ-rpB"/>
+                            <constraint firstItem="Kqf-GZ-IGv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="ldn-iu-4VM"/>
+                            <constraint firstAttribute="bottom" secondItem="Kqf-GZ-IGv" secondAttribute="bottom" id="vsf-ON-7js"/>
+                            <constraint firstAttribute="trailing" secondItem="Snh-4K-Dhi" secondAttribute="trailing" id="y1N-4a-51f"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="bg" width="720" height="1081"/>
+    </resources>
+</document>

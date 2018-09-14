@@ -9,35 +9,33 @@
 import UIKit
 import RxSwift
 
-protocol PhotoAvatarCropNavigator {
-    func cancel()
-    func toCropPhoto()
+protocol CropAvatarPhotoNavigator {
+    func back()
+    func toCropPhoto(image: UIImage, imageSubject: PublishSubject<UIImage>)
     func didCroppedPhoto(_ image: UIImage)
     func close()
 }
 
-final class DefaultPhotoAvatarCropNavigator: PhotoAvatarCropNavigator {
+final class DefaultCropAvatarPhotoNavigator: CropAvatarPhotoNavigator {
     private let navigationController: UINavigationController
-    private let imageSubject:PublishSubject<UIImage>
     
-    init(navigationController: UINavigationController,
-         imageSubject: PublishSubject<UIImage>) {
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.imageSubject = imageSubject
     }
     
-    func cancel() {
+    func back() {
         navigationController.popViewController(animated: true)
     }
     
-    func toCropPhoto() {
-        let cropPhotoVc = PhotoAvaViewController(nibName: "TakePhotoViewController", bundle: nil)
-        cropPhotoVc.viewModel = TakePhotoViewModel(navigator: self)
-        navigationController.pushViewController(cropPhotoVc, animated: false)
+    func toCropPhoto(image: UIImage, imageSubject: PublishSubject<UIImage>) {
+        let cropPhotoVc = CropAvatarPhotoViewController(nibName: "CropAvatarPhotoViewController", bundle: nil)
+        cropPhotoVc.viewModel = CropAvatarPhotoViewModel(navigator: self)
+        cropPhotoVc.imageSubject = imageSubject
+        cropPhotoVc.image = image
+        navigationController.pushViewController(cropPhotoVc, animated: true)
     }
     
     func didCroppedPhoto(_ image: UIImage) {
-        imageSubject.onNext(image)
         close()
     }
     

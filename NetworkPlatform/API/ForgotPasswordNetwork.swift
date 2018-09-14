@@ -6,30 +6,24 @@
 //  Copyright © 2018 Mobdev125. All rights reserved.
 //
 
-import UIKit
+import Domain
+import RxSwift
 
-class ForgotPasswordNetwork: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+public final class ForgotPasswordNetwork {
+    private let network: Network<Result>
+    
+    init(network: Network<Result>) {
+        self.network = network
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func sendEmail(params: ForgotPassword) -> Observable<Result> {
+        return network.postItem("api/forgotpass", parameters: params.toJSON())
     }
-    */
-
+    func sendVerificationCode(params: ForgotPassword) -> Observable<Result> {
+        return network.postItem("api/verification_forgotpass", parameters: params.toJSON())
+    }
+    
+    func resetPassword(params: ForgotPassword) -> Observable<Result> {
+        return network.postItem("api/resetpass", parameters: params.toJSON())
+    }
 }

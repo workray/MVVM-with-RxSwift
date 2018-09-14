@@ -10,9 +10,9 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PhotoAvatatCropViewController" customModule="Vocal_Voter" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CropAvatarPhotoViewController" customModule="Vocal_Voter" customModuleProvider="target">
             <connections>
-                <outlet property="cancelButton" destination="jv0-hg-ceN" id="cCJ-dJ-MXn"/>
+                <outlet property="backButton" destination="gE0-Qi-03D" id="auK-FG-IGa"/>
                 <outlet property="chooseButton" destination="i3C-Id-KaB" id="gDJ-kA-YsG"/>
                 <outlet property="closeButton" destination="xdR-Iv-crA" id="3JH-OK-kmO"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -23,8 +23,13 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xdR-Iv-crA" customClass="RaisedButton" customModule="Material">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xdR-Iv-crA" customClass="CloseButton" customModule="Vocal_Voter" customModuleProvider="target">
                     <rect key="frame" x="329" y="28" width="30" height="30"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                            <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i3C-Id-KaB" customClass="RaisedButton" customModule="Material">
                     <rect key="frame" x="329" y="617" width="30" height="30"/>
@@ -38,13 +43,15 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jv0-hg-ceN" customClass="RaisedButton" customModule="Material">
-                    <rect key="frame" x="16" y="617" width="30" height="30"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Crop User Photo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oVV-1v-13z">
+                    <rect key="frame" x="111.5" y="30" width="153" height="27.5"/>
+                    <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="20"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gE0-Qi-03D" customClass="BackButton" customModule="Vocal_Voter" customModuleProvider="target">
+                    <rect key="frame" x="16" y="28" width="30" height="30"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="title" value="Cancel"/>
-                        <userDefinedRuntimeAttribute type="color" keyPath="titleColor">
-                            <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
                             <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </userDefinedRuntimeAttribute>
@@ -53,12 +60,14 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="jv0-hg-ceN" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="0ar-Oh-mL2"/>
+                <constraint firstItem="oVV-1v-13z" firstAttribute="centerY" secondItem="gE0-Qi-03D" secondAttribute="centerY" id="3Tm-cV-d5v"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="i3C-Id-KaB" secondAttribute="trailing" constant="16" id="5Yw-AA-rQg"/>
                 <constraint firstItem="xdR-Iv-crA" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="8" id="7vQ-cV-GQe"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="xdR-Iv-crA" secondAttribute="trailing" constant="16" id="Akh-Me-D6o"/>
+                <constraint firstItem="oVV-1v-13z" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Wi5-GT-3d3"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="i3C-Id-KaB" secondAttribute="bottom" constant="20" id="d06-Io-OFp"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="jv0-hg-ceN" secondAttribute="bottom" constant="20" id="gup-UF-SuX"/>
+                <constraint firstItem="gE0-Qi-03D" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="8" id="lxU-f6-x8W"/>
+                <constraint firstItem="gE0-Qi-03D" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="xhl-jy-drN"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
         </view>

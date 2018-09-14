@@ -7,29 +7,61 @@
 //
 
 import UIKit
+import Domain
+import RxSwift
 
-class VerificationPhotoNavigator: UIViewController {
+protocol VerificationPhotoNavigator {
+    func back()
+    func toVerificationPhoto()
+    func toTakePhoto(_ imageSubject: PublishSubject<UIImage>, animated: Bool)
+    func toHome()
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+final class DefaultVerificationPhotoNavigator: VerificationPhotoNavigator {
+    private let navigationController: UINavigationController
+    private let services: UseCaseProvider
+    private let storyBoard: UIStoryboard
+    
+    init(services: UseCaseProvider,
+         navigationController: UINavigationController,
+         storyBoard: UIStoryboard) {
+        self.services = services
+        self.navigationController = navigationController
+        self.storyBoard = storyBoard
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func toVerificationPhoto() {
+        let viewModel = VerificationPhotoViewModel(userUseCase: services.makeUserUseCase(), imageUseCase: services.makeImageUseCase(), navigator: self)
+        let vc = storyBoard.instantiateViewController(ofType: VerificationPhotoViewController.self)
+        vc.viewModel = viewModel
+        navigationController.pushViewController(vc, animated: true)
     }
-    */
-
+    
+    func toTakePhoto(_ imageSubject: PublishSubject<UIImage>, animated: Bool) {
+        let navigationController = UINavigationController()
+        navigationController.isNavigationBarHidden = true
+        navigationController.isToolbarHidden = true
+        let takePhotoNavigator = DefaultTakePhotoNavigator(navigationController: navigationController, imageSubject: imageSubject, isAvatar: false)
+        takePhotoNavigator.toTakePhoto()
+        
+        self.navigationController.present(navigationController, animated: animated, completion: nil)
+    }
+    
+    func back() {
+        navigationController.popViewController(animated: true)
+    }
+    
+    func toHome() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let mainNavigationController = UINavigationController()
+        let homeNavigator = DefaultHomeNavigator(services: services,
+                                                 navigationController: mainNavigationController,
+                                                  storyBoard: storyboard)
+        homeNavigator.toHome()
+        
+        self.navigationController.present(mainNavigationController, animated: true) { [unowned self] in
+            self.navigationController.popToRootViewController(animated: false)
+        }
+    }
 }

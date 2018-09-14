@@ -6,30 +6,23 @@
 //  Copyright © 2018 Mobdev125. All rights reserved.
 //
 
-import UIKit
+import Domain
+import ObjectMapper
 
-class ForgotPassword_Mapping: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+extension ForgotPassword: ImmutableMappable {
+    
+    // JSON -> Object
+    public init(map: Map) throws {
+        self.init(email: try map.value("email"),
+                  verificationCode: try map.value("verification_code"),
+                  newPassword: try map.value("new_password"))
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // object -> JSON
+    public mutating func mapping(map: Map) {
+        email               >>> map["email"]
+        verificationCode    >>> map["verification_code"]
+        newPassword         >>> map["new_password"]
     }
-    */
-
 }
+

@@ -7,29 +7,36 @@
 //
 
 import UIKit
+import Domain
 
-class HomeNavigator: UIViewController {
+protocol HomeNavigator {
+    func toLogin()
+    func toHome()
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+final class DefaultHomeNavigator: HomeNavigator {
+    private let storyBoard: UIStoryboard
+    private let navigationController: UINavigationController
+    private let services: UseCaseProvider
+    
+    init(services: UseCaseProvider,
+         navigationController: UINavigationController,
+         storyBoard: UIStoryboard) {
+        self.services = services
+        self.navigationController = navigationController
+        self.storyBoard = storyBoard
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func toHome() {
+        let vc = storyBoard.instantiateViewController(ofType: HomeViewController.self)
+        vc.viewModel = HomeViewModel(useCase: services.makeUserUseCase(),
+                                      navigator: self)
+        navigationController.pushViewController(vc, animated: true)
     }
-    */
-
+    func toLogin() {
+        AppManager.sharedInstance().logout()
+        navigationController.dismiss(animated: true, completion: nil)
+    }
 }
+
+

@@ -7,7 +7,12 @@
 //
 
 import UIKit
+import RxSwift
 
-class ImageUseCase: NSObject {
-
+public protocol ImageUseCase {
+    func uploadImage(_ blobName: String, filePath: String) -> Observable<String>
+    
+    func uploadImage(_ blobName: String, data: Data) -> Observable<String>
+    
+    func deleteImage(_ blobName: String) -> Observable<Void>
 }
