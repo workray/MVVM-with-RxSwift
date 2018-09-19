@@ -39,7 +39,7 @@ open class CollectionViewCell: UICollectionViewCell, Pulseable, PulseableLayer {
    allows the dropshadow effect on the backing layer, while clipping
    the image to a desired shape within the visualLayer.
    */
-  open let visualLayer = CAShapeLayer()
+  public let visualLayer = CAShapeLayer()
   
   /// A Pulse reference.
   internal var pulse: Pulse!
@@ -149,10 +149,10 @@ open class CollectionViewCell: UICollectionViewCell, Pulseable, PulseableLayer {
   @IBInspectable
   open var contentsGravity: String {
     get {
-      return visualLayer.contentsGravity
+      return convertFromCALayerContentsGravity(visualLayer.contentsGravity)
     }
     set(value) {
-      visualLayer.contentsGravity = value
+      visualLayer.contentsGravity = convertToCALayerContentsGravity(value)
     }
   }
   
@@ -274,4 +274,14 @@ extension CollectionViewCell {
     visualLayer.frame = bounds
     visualLayer.cornerRadius = layer.cornerRadius
   }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCALayerContentsGravity(_ input: CALayerContentsGravity) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToCALayerContentsGravity(_ input: String) -> CALayerContentsGravity {
+	return CALayerContentsGravity(rawValue: input)
 }

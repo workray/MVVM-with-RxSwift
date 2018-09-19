@@ -55,7 +55,7 @@ final class AzureBlob {
                 subject.onError(error)
             }
             else {
-                subject.onNext("\(self.endPoint)\(blobName)")
+                subject.onNext("\(self.endPoint)\(self.containerName)/\(blobName)")
             }
         }
         return subject
@@ -69,13 +69,14 @@ final class AzureBlob {
                 subject.onError(error)
             }
             else {
-                subject.onNext("\(self.endPoint)\(blobName)")
+                subject.onNext("\(self.endPoint)\(self.containerName)/\(blobName)")
             }
         }
         return subject
     }
     
-    func deleteImageFromBlobContainer(_ blobName: String) -> Observable<Void> {
+    func deleteImageFromBlobContainer(_ imageUrl: String) -> Observable<Void> {
+        let blobName = imageUrl.replacingOccurrences(of: "\(self.endPoint)\(self.containerName)/", with: "")
         let subject = PublishSubject<Void>.init()
         let blob = container.blockBlobReference(fromName: blobName)
         blob.delete { (error) in

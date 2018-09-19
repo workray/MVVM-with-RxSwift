@@ -17,6 +17,7 @@ class HomeViewController: UIViewController {
     var viewModel: HomeViewModel!
     
     @IBOutlet weak var logoutButton: UIBarButtonItem!
+    @IBOutlet weak var profileButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,9 +34,12 @@ class HomeViewController: UIViewController {
     private func bindViewModel() {
         assert(viewModel != nil)
         
-        let input = HomeViewModel.Input(logoutTrigger: logoutButton.rx.tap.asDriver())
+        let input = HomeViewModel.Input(
+            profileTrigger: profileButton.rx.tap.asDriver(),
+            logoutTrigger: logoutButton.rx.tap.asDriver())
         let output = viewModel.transform(input: input)
         
+        output.profile.drive().disposed(by: disposeBag)
         output.logout.drive().disposed(by: disposeBag)
     }
 

@@ -50,28 +50,33 @@ public enum Gravity: Int {
 public func GravityToValue(gravity: Gravity) -> String {
   switch gravity {
   case .center:
-    return kCAGravityCenter
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.center)
   case .top:
-    return kCAGravityTop
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.top)
   case .bottom:
-    return kCAGravityBottom
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.bottom)
   case .left:
-    return kCAGravityLeft
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.left)
   case .right:
-    return kCAGravityRight
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.right)
   case .topLeft:
-    return kCAGravityBottomLeft
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.bottomLeft)
   case .topRight:
-    return kCAGravityBottomRight
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.bottomRight)
   case .bottomLeft:
-    return kCAGravityTopLeft
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.topLeft)
   case .bottomRight:
-    return kCAGravityTopRight
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.topRight)
   case .resize:
-    return kCAGravityResize
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.resize)
   case .resizeAspect:
-    return kCAGravityResizeAspect
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.resizeAspect)
   case .resizeAspectFill:
-    return kCAGravityResizeAspectFill
+    return convertFromCALayerContentsGravity(CALayerContentsGravity.resizeAspectFill)
   }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCALayerContentsGravity(_ input: CALayerContentsGravity) -> String {
+	return input.rawValue
 }

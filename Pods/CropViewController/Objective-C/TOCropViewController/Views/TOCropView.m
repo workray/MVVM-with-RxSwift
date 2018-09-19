@@ -149,7 +149,7 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
     self.restoreImageCropFrame = CGRectZero;
     self.restoreAngle = 0;
     self.cropAdjustingDelay = kTOCropTimerDuration;
-    self.cropViewPadding = kTOCropViewPadding;
+    self.cropViewPadding = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? (MIN(UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height) - 300) / 3 : kTOCropViewPadding;
     self.maximumZoomScale = kTOMaximumZoomScale;
     
     /* Dynamic animation blurring is only possible on iOS 9, however since the API was available on iOS 8,

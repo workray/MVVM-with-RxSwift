@@ -8,6 +8,7 @@
 
 import UIKit
 import Domain
+import RxSwift
 
 enum MyError: Error {
     case existUser
@@ -17,6 +18,7 @@ let SUCCESS = "success"
 let FAIL = "fail"
 
 class AppManager {
+    
     private static var instance: AppManager?
     static func sharedInstance() -> AppManager {
         if instance == nil {

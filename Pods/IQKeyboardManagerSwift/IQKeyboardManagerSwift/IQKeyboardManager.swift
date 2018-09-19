@@ -855,7 +855,7 @@ public class IQKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     #if swift(>=4.2)
     private var         _animationCurve : UIView.AnimationOptions = .curveEaseOut
     #else
-    private var         _animationCurve : UIViewAnimationOptions = .curveEaseOut
+    private var         _animationCurve : UIView.AnimationOptions = .curveEaseOut
     #endif
 
     /*******************************************/
@@ -1372,9 +1372,9 @@ public class IQKeyboardManager: NSObject, UIGestureRecognizerDelegate {
             let durationUserInfoKey = UIResponder.keyboardAnimationDurationUserInfoKey
             let frameEndUserInfoKey = UIResponder.keyboardFrameEndUserInfoKey
             #else
-            let curveUserInfoKey    = UIKeyboardAnimationCurveUserInfoKey
-            let durationUserInfoKey = UIKeyboardAnimationDurationUserInfoKey
-            let frameEndUserInfoKey = UIKeyboardFrameEndUserInfoKey
+            let curveUserInfoKey    = UIResponder.keyboardAnimationCurveUserInfoKey
+            let durationUserInfoKey = UIResponder.keyboardAnimationDurationUserInfoKey
+            let frameEndUserInfoKey = UIResponder.keyboardFrameEndUserInfoKey
             #endif
 
             //  Getting keyboard animation.
@@ -1495,7 +1495,7 @@ public class IQKeyboardManager: NSObject, UIGestureRecognizerDelegate {
             #if swift(>=4.2)
             let durationUserInfoKey = UIResponder.keyboardAnimationDurationUserInfoKey
             #else
-            let durationUserInfoKey = UIKeyboardAnimationDurationUserInfoKey
+            let durationUserInfoKey = UIResponder.keyboardAnimationDurationUserInfoKey
             #endif
 
             //  Getting keyboard animation duration
@@ -2028,18 +2028,18 @@ public class IQKeyboardManager: NSObject, UIGestureRecognizerDelegate {
         
         let UIApplicationWillChangeStatusBarOrientation = UIApplication.willChangeStatusBarOrientationNotification
         #else
-        let UIKeyboardWillShow  = Notification.Name.UIKeyboardWillShow
-        let UIKeyboardDidShow   = Notification.Name.UIKeyboardDidShow
-        let UIKeyboardWillHide  = Notification.Name.UIKeyboardWillHide
-        let UIKeyboardDidHide   = Notification.Name.UIKeyboardDidHide
+        let UIKeyboardWillShow  = UIResponder.keyboardWillShowNotification
+        let UIKeyboardDidShow   = UIResponder.keyboardDidShowNotification
+        let UIKeyboardWillHide  = UIResponder.keyboardWillHideNotification
+        let UIKeyboardDidHide   = UIResponder.keyboardDidHideNotification
         
-        let UITextFieldTextDidBeginEditing  = Notification.Name.UITextFieldTextDidBeginEditing
-        let UITextFieldTextDidEndEditing    = Notification.Name.UITextFieldTextDidEndEditing
+        let UITextFieldTextDidBeginEditing  = UITextField.textDidBeginEditingNotification
+        let UITextFieldTextDidEndEditing    = UITextField.textDidEndEditingNotification
         
-        let UITextViewTextDidBeginEditing   = Notification.Name.UITextViewTextDidBeginEditing
-        let UITextViewTextDidEndEditing     = Notification.Name.UITextViewTextDidEndEditing
+        let UITextViewTextDidBeginEditing   = UITextView.textDidBeginEditingNotification
+        let UITextViewTextDidEndEditing     = UITextView.textDidEndEditingNotification
         
-        let UIApplicationWillChangeStatusBarOrientation = Notification.Name.UIApplicationWillChangeStatusBarOrientation
+        let UIApplicationWillChangeStatusBarOrientation = UIApplication.willChangeStatusBarOrientationNotification
         #endif
 
         //  Registering for keyboard notification.
@@ -2074,18 +2074,18 @@ public class IQKeyboardManager: NSObject, UIGestureRecognizerDelegate {
         
         let UIApplicationWillChangeStatusBarOrientation = UIApplication.willChangeStatusBarOrientationNotification
         #else
-        let UIKeyboardWillShow  = Notification.Name.UIKeyboardWillShow
-        let UIKeyboardDidShow   = Notification.Name.UIKeyboardDidShow
-        let UIKeyboardWillHide  = Notification.Name.UIKeyboardWillHide
-        let UIKeyboardDidHide   = Notification.Name.UIKeyboardDidHide
+        let UIKeyboardWillShow  = UIResponder.keyboardWillShowNotification
+        let UIKeyboardDidShow   = UIResponder.keyboardDidShowNotification
+        let UIKeyboardWillHide  = UIResponder.keyboardWillHideNotification
+        let UIKeyboardDidHide   = UIResponder.keyboardDidHideNotification
         
-        let UITextFieldTextDidBeginEditing  = Notification.Name.UITextFieldTextDidBeginEditing
-        let UITextFieldTextDidEndEditing    = Notification.Name.UITextFieldTextDidEndEditing
+        let UITextFieldTextDidBeginEditing  = UITextField.textDidBeginEditingNotification
+        let UITextFieldTextDidEndEditing    = UITextField.textDidEndEditingNotification
         
-        let UITextViewTextDidBeginEditing   = Notification.Name.UITextViewTextDidBeginEditing
-        let UITextViewTextDidEndEditing     = Notification.Name.UITextViewTextDidEndEditing
+        let UITextViewTextDidBeginEditing   = UITextView.textDidBeginEditingNotification
+        let UITextViewTextDidEndEditing     = UITextView.textDidEndEditingNotification
         
-        let UIApplicationWillChangeStatusBarOrientation = Notification.Name.UIApplicationWillChangeStatusBarOrientation
+        let UIApplicationWillChangeStatusBarOrientation = UIApplication.willChangeStatusBarOrientationNotification
         #endif
 
         //  Unregistering for keyboard notification.

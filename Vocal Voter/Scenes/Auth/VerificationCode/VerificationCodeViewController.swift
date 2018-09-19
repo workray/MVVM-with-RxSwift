@@ -132,26 +132,6 @@ extension VerificationCodeViewController: UITextFieldDelegate {
             if IQKeyboardManager.shared.canGoNext {
                 IQKeyboardManager.shared.goNext()
             }
-//            if (textField.text?.isEmpty)! {
-//                textField.text = string
-//            }
-//            else {
-//                if textField == verificationCodeTextField1 {
-//                    verificationCodeTextField2.text = string
-//                }
-//                else if textField == verificationCodeTextField2 {
-//                    verificationCodeTextField3.text = string
-//                }
-//                else if textField == verificationCodeTextField3 {
-//                    verificationCodeTextField4.text = string
-//                }
-//                else if textField == verificationCodeTextField4 {
-//                    verificationCodeTextField5.text = string
-//                }
-//                else if textField == verificationCodeTextField5 {
-//                    verificationCodeTextField6.text = string
-//                }
-//            }
         }
         return false
     }

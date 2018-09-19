@@ -16,4 +16,8 @@ public protocol UserUseCase {
     func register(user: User) -> Observable<User>
     func delete(user: User) -> Observable<Void>
     func update(user: User) -> Observable<User>
+    func updatePhoto(photo: UserPhoto) -> Observable<User>
+    func updateProfile(userProfile: UserProfile) -> Observable<User>
+    func updatePassword(userPassword: UserPassword) -> Observable<User>
+    func updateVerificationPhoto(verificationPhoto: UserVerificationPhoto) -> Observable<User>
 }

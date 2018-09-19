@@ -40,12 +40,17 @@ public enum MotionAnimationFillMode: Int {
 public func MotionAnimationFillModeToValue(mode: MotionAnimationFillMode) -> String {
   switch mode {
   case .forwards:
-    return kCAFillModeForwards
+    return convertFromCAMediaTimingFillMode(CAMediaTimingFillMode.forwards)
   case .backwards:
-    return kCAFillModeBackwards
+    return convertFromCAMediaTimingFillMode(CAMediaTimingFillMode.backwards)
   case .both:
-    return kCAFillModeBoth
+    return convertFromCAMediaTimingFillMode(CAMediaTimingFillMode.both)
   case .removed:
-    return kCAFillModeRemoved
+    return convertFromCAMediaTimingFillMode(CAMediaTimingFillMode.removed)
   }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCAMediaTimingFillMode(_ input: CAMediaTimingFillMode) -> String {
+	return input.rawValue
 }

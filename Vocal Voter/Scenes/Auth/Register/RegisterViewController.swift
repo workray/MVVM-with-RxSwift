@@ -45,8 +45,6 @@ class RegisterViewController: AuthBackgroundViewController {
         cameraImageView.image = Icon.photoCamera?.tint(with: UIColor.white)
 
         hideKeyboardWhenTappedAround()
-        bindViewModel()
-        
         prepareFirstName()
         prepareLastName()
         prepareEmail()
@@ -54,6 +52,8 @@ class RegisterViewController: AuthBackgroundViewController {
         prepareConfirmPassword()
         preparePhone()
         prepareZipcode()
+        
+        bindViewModel()
     }
 
     override func didReceiveMemoryWarning() {
@@ -84,7 +84,7 @@ class RegisterViewController: AuthBackgroundViewController {
         output.profile.drive(profileBinding).disposed(by: disposeBag)
         output.checkUser.drive(onNext: { (users) in
             if users.count > 0 {
-                self.showErrorMsg("This email and phone number are already exist!")
+                self.showErrorMsg("This email or phone number are already exist!")
             }
         }).disposed(by: disposeBag)
         output.error.drive(onNext: { [unowned self] (error) in

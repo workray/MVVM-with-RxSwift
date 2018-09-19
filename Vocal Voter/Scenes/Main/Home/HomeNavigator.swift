@@ -12,6 +12,7 @@ import Domain
 protocol HomeNavigator {
     func toLogin()
     func toHome()
+    func toProfile()
 }
 
 final class DefaultHomeNavigator: HomeNavigator {
@@ -36,6 +37,11 @@ final class DefaultHomeNavigator: HomeNavigator {
     func toLogin() {
         AppManager.sharedInstance().logout()
         navigationController.dismiss(animated: true, completion: nil)
+    }
+    
+    func toProfile() {
+        let navigator = DefaultProfileNavigator(services: services, navigationController: navigationController, storyBoard: storyBoard)
+        navigator.toProfile()
     }
 }
 

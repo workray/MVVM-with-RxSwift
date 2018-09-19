@@ -16,4 +16,11 @@ extension String {
         }
         return encodedString
     }
+    
+    static func generateBlobName(prefix: String, subfix: String) -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd"
+        return "\(dateFormatter.string(from: now))/\(prefix)_\(subfix)_\(now.timeIntervalSince1970).jpg"
+    }
 }

@@ -63,8 +63,8 @@ final class VerificationPhotoViewModel: ViewModelType {
             .withLatestFrom(profile)
             .flatMapLatest { [unowned self] profile -> SharedSequence<DriverSharingStrategy, Profile> in
                 if profile.userPhoto != nil {
-                    let blobName = self.generateBlobName("photo")
-                    return self.imageUseCase.uploadImage(blobName, data: UIImageJPEGRepresentation(profile.userPhoto!, 1.0)!)
+                    let blobName = String.generateBlobName(prefix: profile.user.uid, subfix:"photo")
+                    return self.imageUseCase.uploadImage(blobName, data: profile.userPhoto!.jpegData(compressionQuality: 1.0)!)
                                     .trackActivity(activityIndicator)
                                     .trackError(errorTracker)
                                     .asDriverOnErrorJustComplete()
@@ -91,8 +91,8 @@ final class VerificationPhotoViewModel: ViewModelType {
         let uploadVerificationPhoto = uploadUserPhoto
             .flatMapLatest { [unowned self] (profile) -> SharedSequence<DriverSharingStrategy, Profile> in
                 if profile.verificationPhoto != nil {
-                    let blobName = self.generateBlobName("verification")
-                    return self.imageUseCase.uploadImage(blobName, data: UIImageJPEGRepresentation(profile.verificationPhoto!, 1.0)!)
+                    let blobName = String.generateBlobName(prefix:profile.user.uid, subfix:"verification")
+                    return self.imageUseCase.uploadImage(blobName, data: profile.verificationPhoto!.jpegData(compressionQuality: 1.0)!)
                         .trackActivity(activityIndicator)
                         .trackError(errorTracker)
                         .asDriverOnErrorJustComplete()
@@ -139,13 +139,6 @@ final class VerificationPhotoViewModel: ViewModelType {
                       error: errorTracker.asDriver(),
                       activityIndicator: activityIndicator.asDriver()
         )
-    }
-    
-    private func generateBlobName(_ subfix: String) -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy/MM/dd"
-        return "\(dateFormatter.string(from: now))/\(profile.user.username)_\(subfix)_\(now.timeIntervalSince1970).jpg"
     }
 }
 

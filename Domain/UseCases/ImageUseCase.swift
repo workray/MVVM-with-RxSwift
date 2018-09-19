@@ -14,5 +14,5 @@ public protocol ImageUseCase {
     
     func uploadImage(_ blobName: String, data: Data) -> Observable<String>
     
-    func deleteImage(_ blobName: String) -> Observable<Void>
+    func deleteImage(_ imageUrl: String) -> Observable<Void>
 }

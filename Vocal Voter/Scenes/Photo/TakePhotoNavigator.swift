@@ -8,6 +8,7 @@
 
 import UIKit
 import RxSwift
+import CropViewController
 
 protocol TakePhotoNavigator {
     func close()
@@ -42,12 +43,14 @@ final class DefaultTakePhotoNavigator: TakePhotoNavigator {
     
     func didTakePhoto(_ image: UIImage) {
         if isAvatar {
-            let cropNavigator = DefaultCropAvatarPhotoNavigator(navigationController: navigationController)
-            cropNavigator.toCropPhoto(image: image, imageSubject: imageSubject)
+            let cropVc = CropAvatarPhotoViewController(croppingStyle: CropViewCroppingStyle.circular, image: image)
+            cropVc.imageSubject = self.imageSubject
+            self.navigationController.pushViewController(cropVc, animated: true)
         }
         else {
-            imageSubject.onNext(image)
-            close()
+            let cropVc = CropAvatarPhotoViewController(croppingStyle: CropViewCroppingStyle.default, image: image)
+            cropVc.imageSubject = self.imageSubject
+            self.navigationController.pushViewController(cropVc, animated: true)
         }
     }
     

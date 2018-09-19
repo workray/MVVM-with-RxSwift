@@ -51,7 +51,7 @@ class LoginViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         if segue.identifier == "segueLoginForm" {
-            loginFormVc = segue.destination as! LoginFormViewController
+            loginFormVc = segue.destination as? LoginFormViewController
         }
     }
     private func bindViewModel() {

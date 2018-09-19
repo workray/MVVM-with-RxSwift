@@ -72,7 +72,6 @@ class VerificationPhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.view.backgroundColor = .black
         
         imageButton.image = Icon.cm.photoCamera?.tint(with: UIColor.white)

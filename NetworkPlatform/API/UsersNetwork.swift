@@ -34,8 +34,8 @@ public final class UsersNetwork {
         return network.postItemWithTable(tableName, item: user.toJSON())
     }
     
-    public func updateUser(user: User) -> Observable<User> {
-        return network.updateItemWithTable(tableName, item: user.toJSON())
+    public func updateUser(user: [String: Any]) -> Observable<User> {
+        return network.updateItemWithTable(tableName, item: user)
     }
     
     public func deleteUser(user: User) -> Observable<Void> {

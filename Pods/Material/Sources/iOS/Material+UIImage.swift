@@ -298,7 +298,7 @@ extension UIImage {
     let screenScale = Screen.scale
     let imageRect = CGRect(origin: .zero, size: size)
     let hasBlur = radius > CGFloat(Float.ulpOfOne)
-    let hasSaturationChange = fabs(saturationDeltaFactor - 1.0) > CGFloat(Float.ulpOfOne)
+    let hasSaturationChange = fabsf(Float(saturationDeltaFactor - 1.0)) > Float.ulpOfOne
     
     if hasBlur || hasSaturationChange {
       UIGraphicsBeginImageContextWithOptions(size, false, screenScale)

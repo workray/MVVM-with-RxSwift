@@ -26,7 +26,7 @@ class ImageUseCase: Domain.ImageUseCase {
         return blob.uploadImageToBlobContainer(blobName, data:data)
     }
     
-    func deleteImage(_ blobName: String) -> Observable<Void> {
-        return blob.deleteImageFromBlobContainer(blobName)
+    func deleteImage(_ imageUrl: String) -> Observable<Void> {
+        return blob.deleteImageFromBlobContainer(imageUrl)
     }
 }

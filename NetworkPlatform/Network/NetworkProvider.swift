@@ -15,6 +15,8 @@ final class NetworkProvider {
     private let blobContainerName: String
     private let blobConnectionString: String
     
+    let azureBlob: AzureBlob
+    
     public init() {
         // Api
         apiEndpoint = "https://vocalvoter.azurewebsites.net"
@@ -23,6 +25,8 @@ final class NetworkProvider {
         blobEndPoint = "https://vocalvoterstorage.blob.core.windows.net/"
         blobContainerName = "vocalvoter-container"
         blobConnectionString = "DefaultEndpointsProtocol=https;AccountName=vocalvoterstorage;AccountKey=AhvTvaNvsz+WkbgODoA30PXSIM4QAbo19Fiff3aJBT1N2NyEvwwl0xWYtFk5QaesIDqUmO+NMxsqtbPNiCHXMA==;EndpointSuffix=core.windows.net"
+        
+        azureBlob = AzureBlob(blobEndPoint, containerName: blobContainerName, connectionString: blobConnectionString)
     }
     
     public func makeUsersNetwork() -> UsersNetwork {
@@ -31,7 +35,7 @@ final class NetworkProvider {
     }
     
     public func makeImageNetwork() -> AzureBlob {
-        return AzureBlob(blobEndPoint, containerName: blobContainerName, connectionString: blobConnectionString)
+        return azureBlob
     }
     
     public func makeForgotPasswordNetwork() -> ForgotPasswordNetwork {

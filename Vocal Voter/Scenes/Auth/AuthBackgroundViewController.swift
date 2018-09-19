@@ -23,7 +23,7 @@ class AuthBackgroundViewController: UIViewController {
         backgroundImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         let visualEffectView = UIVisualEffectView(frame: self.view.bounds)
-        visualEffectView.effect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        visualEffectView.effect = UIBlurEffect(style: UIBlurEffect.Style.light)
         self.view.insertSubview(visualEffectView, at: 1)
         visualEffectView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     }

@@ -21,18 +21,24 @@ final class HomeViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
+        let profile = input.profileTrigger
+            .do(onNext: navigator.toProfile)
         let logout = input.logoutTrigger
             .do(onNext: navigator.toLogin)
-        return Output(logout: logout)
+        return Output(
+            profile: profile,
+            logout: logout)
     }
 }
 
 extension HomeViewModel {
     struct Input {
+        let profileTrigger: Driver<Void>
         let logoutTrigger: Driver<Void>
     }
     
     struct Output {
+        let profile: Driver<Void>
         let logout: Driver<Void>
     }
 }

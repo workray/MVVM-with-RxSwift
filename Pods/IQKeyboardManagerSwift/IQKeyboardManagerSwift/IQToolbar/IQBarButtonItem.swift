@@ -47,7 +47,7 @@ open class IQBarButtonItem: UIBarButtonItem {
         #if swift(>=4.2)
         let states : [UIControl.State]
         #else
-        let states : [UIControlState]
+        let states : [UIControl.State]
         #endif
 
         states = [.normal,.highlighted,.disabled,.selected,.application,.reserved]
@@ -72,8 +72,8 @@ open class IQBarButtonItem: UIBarButtonItem {
             var textAttributes = [NSAttributedString.Key : Any]()
             let foregroundColorKey = NSAttributedString.Key.foregroundColor
             #elseif swift(>=4)
-            var textAttributes = [NSAttributedStringKey : Any]()
-            let foregroundColorKey = NSAttributedStringKey.foregroundColor
+            var textAttributes = [NSAttributedString.Key : Any]()
+            let foregroundColorKey = NSAttributedString.Key.foregroundColor
             #else
             var textAttributes = [String:Any]()
             let foregroundColorKey = NSForegroundColorAttributeName
@@ -83,13 +83,13 @@ open class IQBarButtonItem: UIBarButtonItem {
 
             #if swift(>=4)
 
-                if let attributes = titleTextAttributes(for: .normal) {
+                if let attributes = convertFromOptionalNSAttributedStringKeyDictionary(titleTextAttributes(for: .normal)) {
                     
                     for (key, value) in attributes {
                         #if swift(>=4.2)
-                        textAttributes[key] = value
+                        textAttributes[NSAttributedString.Key.init(key)] = value
                         #else
-                        textAttributes[NSAttributedStringKey.init(key)] = value
+                        textAttributes[NSAttributedString.Key.init(key)] = value
                         #endif
                     }
                 }
@@ -133,4 +133,10 @@ open class IQBarButtonItem: UIBarButtonItem {
         target = nil
         invocation = nil
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromOptionalNSAttributedStringKeyDictionary(_ input: [NSAttributedString.Key: Any]?) -> [String: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
 }

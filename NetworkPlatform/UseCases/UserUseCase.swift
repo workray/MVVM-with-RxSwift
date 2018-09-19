@@ -11,7 +11,7 @@ import Domain
 import RxSwift
 
 final class UserUseCase<Cache>: Domain.UserUseCase where Cache: AbstractCache, Cache.T == User {
-       
+    
     private let network: UsersNetwork
     private let cache: Cache
     
@@ -40,6 +40,22 @@ final class UserUseCase<Cache>: Domain.UserUseCase where Cache: AbstractCache, C
     }
     
     func update(user: User) -> Observable<User> {
-        return network.updateUser(user: user)
+        return network.updateUser(user: user.toJSON())
+    }
+    
+    func updatePhoto(photo: UserPhoto) -> Observable<User> {
+        return network.updateUser(user: photo.toJSON())
+    }
+    
+    func updateProfile(userProfile: UserProfile) -> Observable<User> {
+        return network.updateUser(user: userProfile.toJSON())
+    }
+    
+    func updatePassword(userPassword: UserPassword) -> Observable<User> {
+        return network.updateUser(user: userPassword.toJSON())
+    }
+    
+    func updateVerificationPhoto(verificationPhoto: UserVerificationPhoto) -> Observable<User> {
+        return network.updateUser(user: verificationPhoto.toJSON())
     }
 }

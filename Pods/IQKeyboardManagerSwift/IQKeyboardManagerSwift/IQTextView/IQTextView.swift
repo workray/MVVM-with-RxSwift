@@ -33,7 +33,7 @@ open class IQTextView : UITextView {
         #if swift(>=4.2)
         let UITextViewTextDidChange = UITextView.textDidChangeNotification
         #else
-        let UITextViewTextDidChange = Notification.Name.UITextViewTextDidChange
+        let UITextViewTextDidChange = UITextView.textDidChangeNotification
         #endif
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshPlaceholder), name:UITextViewTextDidChange, object: self)
@@ -45,7 +45,7 @@ open class IQTextView : UITextView {
         #if swift(>=4.2)
         let notificationName = UITextView.textDidChangeNotification
         #else
-        let notificationName = Notification.Name.UITextViewTextDidChange
+        let notificationName = UITextView.textDidChangeNotification
         #endif
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshPlaceholder), name: notificationName, object: self)
@@ -57,7 +57,7 @@ open class IQTextView : UITextView {
         #if swift(>=4.2)
         let UITextViewTextDidChange = UITextView.textDidChangeNotification
         #else
-        let UITextViewTextDidChange = Notification.Name.UITextViewTextDidChange
+        let UITextViewTextDidChange = UITextView.textDidChangeNotification
         #endif
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshPlaceholder), name: UITextViewTextDidChange, object: self)
