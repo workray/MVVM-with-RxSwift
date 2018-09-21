@@ -14,7 +14,7 @@ import Material
 import JGProgressHUD
 import Kingfisher
 
-class VerificationPhotoViewController: UIViewController {
+class VerificationPhotoViewController: ImageViewController {
     
     private let disposeBag = DisposeBag()
     
@@ -25,63 +25,12 @@ class VerificationPhotoViewController: UIViewController {
     @IBOutlet weak var doneButton: RaisedButton!
     @IBOutlet weak var contentView: UIView!
     
-    let hud = JGProgressHUD(style: .dark)
-    
-    lazy var zoomingScrollView: UIScrollView = {
-        let scrollView = UIScrollView(frame: self.contentView.bounds)
-        scrollView.delegate = self
-        scrollView.backgroundColor = .clear
-        scrollView.alwaysBounceVertical = false
-        scrollView.alwaysBounceHorizontal = false
-        scrollView.showsVerticalScrollIndicator = true
-        scrollView.flashScrollIndicators()
-        scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = self.maxZoomScale()
-        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
-        return scrollView
-    }()
-    
-    lazy var imageView: UIImageView = {
-        let view = UIImageView(frame: self.contentView.bounds)
-        view.backgroundColor = .clear
-        view.contentMode = .scaleAspectFit
-        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.isUserInteractionEnabled = true
-        
-        return view
-    }()
-    
-    var image: UIImage?
-    
-    func maxZoomScale() -> CGFloat {
-        guard let image = self.imageView.image else { return 1 }
-        
-        var widthFactor = CGFloat(1.0)
-        var heightFactor = CGFloat(1.0)
-        if image.size.width > self.contentView.bounds.width {
-            widthFactor = image.size.width / self.contentView.bounds.width
-        }
-        if image.size.height > self.contentView.bounds.height {
-            heightFactor = image.size.height / self.contentView.bounds.height
-        }
-        
-        return max(2.0, max(widthFactor, heightFactor))
-    }
+    let hud = UIViewController.getHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .black
-        
         imageButton.image = Icon.cm.photoCamera?.tint(with: UIColor.white)
-        
-        self.zoomingScrollView.addSubview(self.imageView)
-        self.contentView.addSubview(self.zoomingScrollView)
-        
-        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(VerificationPhotoViewController.doubleTapAction))
-        doubleTapRecognizer.numberOfTapsRequired = 2
-        self.zoomingScrollView.addGestureRecognizer(doubleTapRecognizer)
         
         bindViewModel()
     }
@@ -133,44 +82,15 @@ class VerificationPhotoViewController: UIViewController {
     var profileBinding: Binder<Profile> {
         return Binder(self, binding: { (vc, profile) in
             if profile.verificationPhoto != nil {
-                vc.image = profile.verificationPhoto
-                vc.display()
+                vc.imageView.image = profile.verificationPhoto
             }
             else if !profile.user.verificationUrl.isEmpty {
-                vc.imageView.kf.setImage(with: URL(string: profile.user.verificationUrl))
-                vc.zoomingScrollView.maximumZoomScale = self.maxZoomScale()
+                vc.imageView.imageUrl = profile.user.verificationUrl
             }
         })
     }
     
-    @objc func doubleTapAction(recognizer: UITapGestureRecognizer) {
-        let zoomScale = self.zoomingScrollView.zoomScale == 1 ? self.maxZoomScale() : 1
-        
-        let touchPoint = recognizer.location(in: self.imageView)
-        
-        let scrollViewSize = self.imageView.bounds.size
-        
-        let width = scrollViewSize.width / zoomScale
-        let height = scrollViewSize.height / zoomScale
-        let originX = touchPoint.x - (width / 2.0)
-        let originY = touchPoint.y - (height / 2.0)
-        
-        let rectToZoomTo = CGRect(x: originX, y: originY, width: width, height: height)
-        
-        self.zoomingScrollView.zoom(to: rectToZoomTo, animated: true)
-    }
-    
-    func display() {
-        if let image = image {
-            self.imageView.image = image
-            self.zoomingScrollView.maximumZoomScale = self.maxZoomScale()
-        }
-    }
-}
-
-extension VerificationPhotoViewController: UIScrollViewDelegate {
-    
-    func viewForZooming(in _: UIScrollView) -> UIView? {
-        return self.imageView
+    override func getContentView() -> UIView {
+        return self.contentView
     }
 }

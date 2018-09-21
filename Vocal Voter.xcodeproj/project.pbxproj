@@ -26,6 +26,9 @@
 		1E3E8D43215297A0007D050C /* ChangeVerificationPhotoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3E8D42215297A0007D050C /* ChangeVerificationPhotoViewModel.swift */; };
 		1E3E8D4521529948007D050C /* UserVerificationPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3E8D4421529948007D050C /* UserVerificationPhoto.swift */; };
 		1E3E8D472152997C007D050C /* UserVerificationPhoto+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3E8D462152997C007D050C /* UserVerificationPhoto+Mapping.swift */; };
+		1E3E8D4B21547773007D050C /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3E8D4A21547773007D050C /* ImageView.swift */; };
+		1E3E8D4E2154BD8D007D050C /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3E8D4D2154BD8D007D050C /* ImageViewController.swift */; };
+		1E3E8D502154C8EE007D050C /* AuthProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3E8D4F2154C8EE007D050C /* AuthProfileManager.swift */; };
 		1E8094A2213D75B40052F8BB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E8094A1213D75B40052F8BB /* AppDelegate.swift */; };
 		1E8094A9213D75BE0052F8BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E8094A8213D75BE0052F8BB /* Assets.xcassets */; };
 		1E8094AC213D75BF0052F8BB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E8094AA213D75BF0052F8BB /* LaunchScreen.storyboard */; };
@@ -173,6 +176,9 @@
 		1E3E8D42215297A0007D050C /* ChangeVerificationPhotoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeVerificationPhotoViewModel.swift; sourceTree = "<group>"; };
 		1E3E8D4421529948007D050C /* UserVerificationPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVerificationPhoto.swift; sourceTree = "<group>"; };
 		1E3E8D462152997C007D050C /* UserVerificationPhoto+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserVerificationPhoto+Mapping.swift"; sourceTree = "<group>"; };
+		1E3E8D4A21547773007D050C /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
+		1E3E8D4D2154BD8D007D050C /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		1E3E8D4F2154C8EE007D050C /* AuthProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProfileManager.swift; sourceTree = "<group>"; };
 		1E80949E213D75B40052F8BB /* Vocal Voter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vocal Voter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E8094A1213D75B40052F8BB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E8094A8213D75BE0052F8BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -337,6 +343,15 @@
 			path = ChangeVerificationPhoto;
 			sourceTree = "<group>";
 		};
+		1E3E8D4C2154BD7B007D050C /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				1E3E8D4D2154BD8D007D050C /* ImageViewController.swift */,
+				1E8194EA214A47FD000E6222 /* AuthBackgroundViewController.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		1E809495213D75B40052F8BB = {
 			isa = PBXGroup;
 			children = (
@@ -421,6 +436,7 @@
 				1E8194E8214A2138000E6222 /* String+Ext.swift */,
 				1E81950C214BF956000E6222 /* VerificationCodeTextField.swift */,
 				1E3E8D2E215273AD007D050C /* UITableViewController+Ext.swift */,
+				1E3E8D4A21547773007D050C /* ImageView.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -577,6 +593,7 @@
 		1EBE861421404A2200780249 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				1E3E8D4C2154BD7B007D050C /* Base */,
 				1EEE6A6C214285D60034D97F /* Custom */,
 				1EBE86562140ED8F00780249 /* Photo */,
 				1EBE862C2140726200780249 /* Auth */,
@@ -616,7 +633,7 @@
 				1EBE863B2140918800780249 /* Register */,
 				1EBE86372140903100780249 /* Login */,
 				1EBE862D2140726200780249 /* Auth.storyboard */,
-				1E8194EA214A47FD000E6222 /* AuthBackgroundViewController.swift */,
+				1E3E8D4F2154C8EE007D050C /* AuthProfileManager.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -1026,12 +1043,14 @@
 				1E819503214A7D8E000E6222 /* ResetPasswordViewController.swift in Sources */,
 				1EBE86542140D30A00780249 /* CircleView.swift in Sources */,
 				1EBE868A21415C2B00780249 /* TakePhotoNavigator.swift in Sources */,
+				1E3E8D502154C8EE007D050C /* AuthProfileManager.swift in Sources */,
 				1E3E8D412152978E007D050C /* ChangeVerificationPhotoNavigator.swift in Sources */,
 				1E3E8D2F215273AD007D050C /* UITableViewController+Ext.swift in Sources */,
 				1EEE6A70214285FC0034D97F /* CloseButton.swift in Sources */,
 				1E81951721510A5E000E6222 /* ProfileNavigator.swift in Sources */,
 				1E8094F6213F2C880052F8BB /* Observable+Ext.swift in Sources */,
 				1E3E8D3C2152827B007D050C /* PasswordTableViewCell.swift in Sources */,
+				1E3E8D4B21547773007D050C /* ImageView.swift in Sources */,
 				1EBE864C2140C68A00780249 /* RegisterViewModel.swift in Sources */,
 				1EBE86352140726200780249 /* LoginViewModel.swift in Sources */,
 				1EBE8672214128AB00780249 /* PreviewView.swift in Sources */,
@@ -1065,6 +1084,7 @@
 				1EBE86332140726200780249 /* LoginNavigator.swift in Sources */,
 				1E8094F7213F2C880052F8BB /* Reusable.swift in Sources */,
 				1EBE8673214128AB00780249 /* Orientation.swift in Sources */,
+				1E3E8D4E2154BD8D007D050C /* ImageViewController.swift in Sources */,
 				1EBE864E2140CCA900780249 /* ForgotPasswordNavigator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

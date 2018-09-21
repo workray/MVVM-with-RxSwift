@@ -35,7 +35,6 @@ final class DefaultHomeNavigator: HomeNavigator {
         navigationController.pushViewController(vc, animated: true)
     }
     func toLogin() {
-        AppManager.sharedInstance().logout()
         navigationController.dismiss(animated: true, completion: nil)
     }
     

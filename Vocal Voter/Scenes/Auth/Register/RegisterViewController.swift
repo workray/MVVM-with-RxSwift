@@ -23,7 +23,7 @@ class RegisterViewController: AuthBackgroundViewController {
     @IBOutlet weak var backButton: BackButton!
     @IBOutlet weak var cameraImageView: UIImageView!
     @IBOutlet weak var imageButton: RaisedButton!
-    @IBOutlet weak var imageView: CircleImageView!
+    @IBOutlet weak var imageView: ImageView!
     
     @IBOutlet weak var firstnameTextField: VocalVoterTextField!
     @IBOutlet weak var lastnameTextField: VocalVoterTextField!
@@ -35,7 +35,7 @@ class RegisterViewController: AuthBackgroundViewController {
     
     @IBOutlet weak var continueButton: RaisedButton!
     
-    let hud = JGProgressHUD(style: .dark)
+    let hud = UIViewController.getHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,8 +82,8 @@ class RegisterViewController: AuthBackgroundViewController {
         output.photo.drive().disposed(by: disposeBag)
         output.next.drive().disposed(by: disposeBag)
         output.profile.drive(profileBinding).disposed(by: disposeBag)
-        output.checkUser.drive(onNext: { (users) in
-            if users.count > 0 {
+        output.checkUser.drive(onNext: { (valid) in
+            if !valid {
                 self.showErrorMsg("This email or phone number are already exist!")
             }
         }).disposed(by: disposeBag)
@@ -120,10 +120,6 @@ extension RegisterViewController {
         
         if let image = profile.userPhoto {
             self.imageView.image = image
-            self.imageView.isHidden = false
-        }
-        else if !profile.user.photoUrl.isEmpty {
-            self.imageView.kf.setImage(with: URL(string: profile.user.photoUrl))
             self.imageView.isHidden = false
         }
     }

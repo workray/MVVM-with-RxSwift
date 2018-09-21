@@ -23,7 +23,13 @@ final class ChangePasswordViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
+        let activityIndicator = ActivityIndicator()
+        let activity = activityIndicator.asDriver()
+        
         let back = input.backTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: navigator.back)
         
         let passwordSubject = PublishSubject<UserPassword>.init()
@@ -37,13 +43,14 @@ final class ChangePasswordViewModel: ViewModelType {
             }
             .startWith(self.password)
         
-        let activityIndicator = ActivityIndicator()
-        let valid = Driver.combineLatest(password, input.oldPassword, input.newPassword, activityIndicator.asDriver()) {
+        let valid = Driver.combineLatest(password, input.oldPassword, input.newPassword, activity) {
             return $0.password == $1.password() && $2.count >= 6 && !$3
         }
         
         let errorTracker = ErrorTracker()
         let change = input.changeTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
             .withLatestFrom(updatePassword)
             .flatMapLatest { [unowned self] password -> SharedSequence<DriverSharingStrategy, User> in
                 return self.userUseCase.updatePassword(userPassword: password)
@@ -51,8 +58,8 @@ final class ChangePasswordViewModel: ViewModelType {
                     .trackError(errorTracker)
                     .asDriverOnErrorJustComplete()
                     .do(onNext: {(user) in
+                        AppManager.getUserPublishSubject().onNext(user)
                         passwordSubject.onNext(UserPassword(uid: user.uid, password: user.password))
-                        AppManager.sharedInstance().profile?.user = user
                     })
             }
             .mapToVoid()

@@ -22,14 +22,18 @@ class CropAvatarPhotoViewController: CropViewController {
 extension CropAvatarPhotoViewController: CropViewControllerDelegate {
     func cropViewController(_ cropViewController: CropViewController, didCropToCircularImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
         assert(imageSubject != nil)
-        imageSubject.onNext(image)
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        if croppingStyle == .circular {
+            imageSubject.onNext(image)
+            self.navigationController?.dismiss(animated: true, completion: nil)
+        }
     }
     
     func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
         assert(imageSubject != nil)
-        imageSubject.onNext(image)
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        if croppingStyle == .default {
+            imageSubject.onNext(image)
+            self.navigationController?.dismiss(animated: true, completion: nil)
+        }
     }
 }
 

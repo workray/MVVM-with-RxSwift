@@ -27,7 +27,7 @@ class ChangePasswordViewController: UITableViewController {
     let oldPasswordSubject = PublishSubject<String>.init()
     let newPasswordSubject = PublishSubject<String>.init()
     
-    let hud = JGProgressHUD(style: .dark)
+    let hud = UIViewController.getHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,6 +103,10 @@ class ChangePasswordViewController: UITableViewController {
         }
 
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44.0
     }
 
 }

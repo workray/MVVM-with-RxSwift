@@ -22,15 +22,11 @@ final class VerificationPhotoViewModel: ViewModelType {
         self.navigator = navigator
         self.userUseCase = userUseCase
         self.imageUseCase = imageUseCase
-        if (AppManager.sharedInstance().profile == nil) {
-            self.profile = Profile()
-        }
-        else {
-            self.profile = AppManager.sharedInstance().profile!
-        }
-        print(self.profile.user.toJSON())
+        self.profile = AuthProfileManager.getProfile()
     }
     func transform(input: Input) -> Output {
+        let activityIndicator = ActivityIndicator()
+        let activity = activityIndicator.asDriver()
         
         let initial = input.initialTrigger
             .filter({ [unowned self] () -> Bool in
@@ -40,26 +36,32 @@ final class VerificationPhotoViewModel: ViewModelType {
                 self.navigator.toTakePhoto(self.imageSubject, animated: true)
             })
         let back = input.backTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: navigator.back)
         
         let photo = input.photoTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: { [unowned self] () in
                 self.navigator.toTakePhoto(self.imageSubject, animated: true)
             })
         
         let image = imageSubject.asDriverOnErrorJustComplete()
-        let profile = Driver.combineLatest(Driver.just(self.profile), image) { [unowned self] (profile, image) -> Profile in
-            self.profile.verificationPhoto = image
-            AppManager.sharedInstance().profile = self.profile
-            return self.profile
+        let profile = Driver.combineLatest(Driver.just(self.profile), image) { (profile, image) -> Profile in
+            let profile = Profile(user: profile.user, userPhoto: profile.userPhoto, verificationPhoto: image)
+            AuthProfileManager.getProfilePublishSubject().onNext(profile)
+            return profile
         }.startWith(self.profile)
         
-        let activityIndicator = ActivityIndicator()
         let errorTracker = ErrorTracker()
         let uploadUserPhoto = input.doneTrigger
-            .filter({ (valid) -> Bool in
-                return valid
-            })
+            .filter{ $0 }
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .withLatestFrom(profile)
             .flatMapLatest { [unowned self] profile -> SharedSequence<DriverSharingStrategy, Profile> in
                 if profile.userPhoto != nil {
@@ -68,8 +70,8 @@ final class VerificationPhotoViewModel: ViewModelType {
                                     .trackActivity(activityIndicator)
                                     .trackError(errorTracker)
                                     .asDriverOnErrorJustComplete()
-                                    .map { [unowned self] (imageUrl) -> Profile in
-                                        self.profile = Profile(user: User(firstname: profile.user.firstName,
+                                    .map { (imageUrl) -> Profile in
+                                        let newProfile = Profile(user: User(firstname: profile.user.firstName,
                                                                           lastname: profile.user.lastName,
                                                                           email: profile.user.email,
                                                                           password: profile.user.password,
@@ -79,8 +81,8 @@ final class VerificationPhotoViewModel: ViewModelType {
                                                                           verificationUrl: profile.user.verificationUrl),
                                                                userPhoto: nil,
                                                                verificationPhoto: profile.verificationPhoto)
-                                        AppManager.sharedInstance().profile = self.profile
-                                        return self.profile
+                                        AuthProfileManager.getProfilePublishSubject().onNext(newProfile)
+                                        return newProfile
                                 }
                 }
                 else {
@@ -96,8 +98,8 @@ final class VerificationPhotoViewModel: ViewModelType {
                         .trackActivity(activityIndicator)
                         .trackError(errorTracker)
                         .asDriverOnErrorJustComplete()
-                        .map { [unowned self] (imageUrl) -> Profile in
-                            self.profile = Profile(user: User(firstname: profile.user.firstName,
+                        .map { (imageUrl) -> Profile in
+                            let newProfile = Profile(user: User(firstname: profile.user.firstName,
                                                               lastname: profile.user.lastName,
                                                               email: profile.user.email,
                                                               password: profile.user.password,
@@ -107,8 +109,8 @@ final class VerificationPhotoViewModel: ViewModelType {
                                                               verificationUrl: imageUrl),
                                                    userPhoto: nil,
                                                    verificationPhoto: nil)
-                            AppManager.sharedInstance().profile = self.profile
-                            return self.profile
+                            AuthProfileManager.getProfilePublishSubject().onNext(newProfile)
+                            return newProfile
                     }
                 }
                 else {
@@ -123,8 +125,9 @@ final class VerificationPhotoViewModel: ViewModelType {
                             .trackError(errorTracker)
                             .asDriverOnErrorJustComplete()
         }
-            .flatMapLatest({ (user) -> SharedSequence<DriverSharingStrategy, Void> in
-                AppManager.sharedInstance().profile = Profile(user: user)
+            .flatMapLatest({[unowned self] (user) -> SharedSequence<DriverSharingStrategy, Void> in
+                AuthProfileManager.getProfilePublishSubject().onNext(Profile())
+                AppManager.getUserPublishSubject().onNext(user)
                 return Driver.just(self.navigator.toHome())
             })
         

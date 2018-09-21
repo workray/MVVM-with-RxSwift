@@ -11,7 +11,8 @@ import RxSwift
 
 public protocol UserUseCase {
     func login(login: Login) -> Observable<[User]>
-    func checkUser(user: CheckUser) -> Observable<[User]>
+    func checkUser(user: CheckUser) -> Observable<Bool>
+    func checkUser(user: CheckUser, uid: String) -> Observable<Bool>
     func user(userId: String) -> Observable<User>
     func register(user: User) -> Observable<User>
     func delete(user: User) -> Observable<Void>

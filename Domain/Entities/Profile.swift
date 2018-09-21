@@ -28,4 +28,10 @@ public struct Profile {
         self.userPhoto = userPhoto
         self.verificationPhoto = verificationPhoto
     }
+    
+    public mutating func clear() {
+        self.user = User()
+        self.userPhoto = nil
+        self.verificationPhoto = nil
+    }
 }

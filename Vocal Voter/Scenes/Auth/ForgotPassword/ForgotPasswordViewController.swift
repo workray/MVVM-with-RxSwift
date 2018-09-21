@@ -25,7 +25,7 @@ class ForgotPasswordViewController: AuthBackgroundViewController {
     @IBOutlet weak var registerButton: RaisedButton!
     @IBOutlet weak var haveAlreadyVerificationCodeButton: RaisedButton!
     
-    let hud = JGProgressHUD(style: .dark)
+    let hud = UIViewController.getHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()

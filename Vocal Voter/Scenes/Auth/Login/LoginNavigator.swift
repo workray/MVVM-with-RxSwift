@@ -8,6 +8,7 @@
 
 import UIKit
 import Domain
+import RxSwift
 
 protocol LoginNavigator {
     func toLogin()
@@ -20,7 +21,7 @@ final class DefaultLoginNavigator: LoginNavigator {
     private let storyBoard: UIStoryboard
     private let navigationController: UINavigationController
     private let services: UseCaseProvider
-    
+
     init(services: UseCaseProvider,
          navigationController: UINavigationController,
          storyBoard: UIStoryboard) {
@@ -37,7 +38,9 @@ final class DefaultLoginNavigator: LoginNavigator {
     }
     
     func toRegister() {
-        let navigator = DefaultRegisterNavigator(services: services, navigationController: navigationController, storyBoard: storyBoard)
+        let navigator = DefaultRegisterNavigator(services: services,
+                                                 navigationController: navigationController,
+                                                 storyBoard: storyBoard)
         navigator.toRegister()
     }
     

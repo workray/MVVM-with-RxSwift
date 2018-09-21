@@ -9,6 +9,7 @@
 import UIKit
 import SwiftMessages
 import Material
+import JGProgressHUD
 
 let kErrorMsgTitle = "Error"
 let kWarningMsgTitle = "Warning"
@@ -65,5 +66,11 @@ extension UIViewController {
             popController?.sourceView = sender
             popController?.sourceRect = sender.bounds
         }
+    }
+    
+    static func getHUD() -> JGProgressHUD {
+        let hud = JGProgressHUD(style: .dark)
+        hud.interactionType = .blockAllTouches
+        return hud
     }
 }

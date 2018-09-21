@@ -25,16 +25,24 @@ final class ChangeVerificationPhotoViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
-        let imageSubject = PublishSubject<UIImage>.init()
+        let activityIndicator = ActivityIndicator()
+        let activity = activityIndicator.asDriver()
+        
         let back = input.backTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: navigator.back)
         
+        let imageSubject = PublishSubject<UIImage>.init()
         let takePhoto = input.photoTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: { [unowned self] in
                 self.navigator.toTakePhoto(imageSubject)
             })
         
-        let activityIndicator = ActivityIndicator()
         let errorTracker = ErrorTracker()
         let image = imageSubject.asDriverOnErrorJustComplete()
         let imageUrl = Driver.combineLatest(Driver.just(self.user.uid), image)
@@ -47,33 +55,31 @@ final class ChangeVerificationPhotoViewModel: ViewModelType {
         }
         let updateVerificationPhoto = Driver.combineLatest(Driver.just(self.user.uid), imageUrl) { (uid, imageUrl) -> UserVerificationPhoto in
                 return UserVerificationPhoto(uid: uid, verificationPhotoUrl: imageUrl)
-            }.flatMapLatest { [unowned self] (verificationPhoto) -> SharedSequence<DriverSharingStrategy, User> in
+            }.flatMapLatest { [unowned self] (verificationPhoto) -> SharedSequence<DriverSharingStrategy, Void> in
                 self.useCase.updateVerificationPhoto(verificationPhoto: verificationPhoto)
                     .trackActivity(activityIndicator)
                     .trackError(errorTracker)
                     .asDriverOnErrorJustComplete()
+                    .map({ (user) -> String in
+                        let oldVerificationUrl = AppManager.getCurrentUser().verificationUrl
+                        AppManager.getUserPublishSubject().onNext(user)
+                        return oldVerificationUrl
+                    }).filter{ !$0.isEmpty }
+                    .flatMapLatest({ [unowned self] (oldVerificationUrl) -> SharedSequence<DriverSharingStrategy, Void> in
+                        return self.imageUseCase.deleteImage(oldVerificationUrl)
+                            .trackActivity(activityIndicator)
+                            .trackError(errorTracker)
+                            .asDriverOnErrorJustComplete()
+                    })
             }
-        let initial = input.initialTrigger.withLatestFrom(Driver.just(AppManager.sharedInstance().profile!.user))
-        let verificationPhoto = Driver.merge(initial, updateVerificationPhoto).map{ $0.verificationUrl }
-        let deleteOldVerificationPhoto = updateVerificationPhoto
-            .filter{ !($0 == AppManager.sharedInstance().profile!.user)}
-            .map({ (user) -> String in
-                let verificationUrl = user.verificationUrl
-                AppManager.sharedInstance().profile?.user = user
-                return verificationUrl
-            })
-            .flatMapLatest { (verificationUrl) -> SharedSequence<DriverSharingStrategy, Void> in
-                return self.imageUseCase.deleteImage(verificationUrl)
-                    .trackActivity(activityIndicator)
-                    .trackError(errorTracker)
-                    .asDriverOnErrorJustComplete()
-        }
+        
+        let verificationPhoto = AppManager.getUserPublishSubject().asDriverOnErrorJustComplete().startWith(AppManager.getCurrentUser()).map{ $0.verificationUrl }
+        
         return Output(
             verificationPhoto: verificationPhoto,
             back: back,
             image: image,
             imageUrl: imageUrl.mapToVoid(),
-            deleteOldVerificationPhoto: deleteOldVerificationPhoto,
             takePhoto: takePhoto,
             updateVerificationPhoto: updateVerificationPhoto.mapToVoid(),
             error: errorTracker.asDriver(),
@@ -84,7 +90,6 @@ final class ChangeVerificationPhotoViewModel: ViewModelType {
 
 extension ChangeVerificationPhotoViewModel {
     struct Input {
-        let initialTrigger: Driver<Void>
         let backTrigger: Driver<Void>
         let photoTrigger: Driver<Void>
     }
@@ -94,7 +99,6 @@ extension ChangeVerificationPhotoViewModel {
         let back: Driver<Void>
         let image: Driver<UIImage>
         let imageUrl: Driver<Void>
-        let deleteOldVerificationPhoto: Driver<Void>
         let takePhoto: Driver<Void>
         let updateVerificationPhoto: Driver<Void>
         let error: Driver<Error>

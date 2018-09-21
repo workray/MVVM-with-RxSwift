@@ -1003,11 +1003,11 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
         
         //Dispatch on the next run-loop so the animation isn't interuppted by the crop operation
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.03f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (isCircularImageDelegateAvailable) {
-                [self.delegate cropViewController:self didCropToCircularImage:image withRect:cropFrame angle:angle];
-            }
             if (isCircularImageCallbackAvailable) {
                 self.onDidCropToCircleImage(image, cropFrame, angle);
+            }
+            else if (isCircularImageDelegateAvailable) {
+                [self.delegate cropViewController:self didCropToCircularImage:image withRect:cropFrame angle:angle];
             }
         });
         
@@ -1025,12 +1025,11 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
         
         //Dispatch on the next run-loop so the animation isn't interuppted by the crop operation
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.03f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (isDidCropToImageDelegateAvailable) {
-                [self.delegate cropViewController:self didCropToImage:image withRect:cropFrame angle:angle];
-            }
-
             if (isDidCropToImageCallbackAvailable) {
                 self.onDidCropToRect(image, cropFrame, angle);
+            }
+            else if (isDidCropToImageDelegateAvailable) {
+                [self.delegate cropViewController:self didCropToImage:image withRect:cropFrame angle:angle];
             }
         });
         

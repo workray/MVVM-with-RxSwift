@@ -17,12 +17,13 @@ import JGProgressHUD
 class ProfileViewController: UITableViewController {
 
     let profileCellIdenitifer = "profileCellIdenitifer"
-    @IBOutlet weak var profileImageView: CircleImageView!
+    @IBOutlet weak var profileImageView: ImageView!
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var profileImageButton: RaisedButton!
     @IBOutlet weak var cameraImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var indicatorView: UIView!
     
     private let disposeBag = DisposeBag()
     
@@ -33,12 +34,11 @@ class ProfileViewController: UITableViewController {
     let changeVerificationPhotoSubject = PublishSubject<Bool>.init()
     let logoutSubject = PublishSubject<Bool>.init()
     
-    let hud = JGProgressHUD(style: .dark)
-    var image: UIImage?
+    let hud = UIViewController.getHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: profileCellIdenitifer)
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
@@ -56,11 +56,7 @@ class ProfileViewController: UITableViewController {
     
     private func bindViewModel() {
         assert(viewModel != nil)
-        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
-            .mapToVoid()
-            .asDriverOnErrorJustComplete()
-        let input = ProfileViewModel.Input.init(initialTrigger: viewWillAppear,
-                                                backTrigger: backButton.rx.tap.asDriver(),
+        let input = ProfileViewModel.Input.init(backTrigger: backButton.rx.tap.asDriver(),
                                                 photoTrigger: profileImageButton.rx.tap.asDriver(),
                                                 editProfileTrigger: editProfileSubject.asDriverOnErrorJustComplete(),
                                                 changePasswordTrigger: changePasswordSubject.asDriverOnErrorJustComplete(),
@@ -68,9 +64,7 @@ class ProfileViewController: UITableViewController {
                                                 logoutTrigger: logoutSubject.asDriverOnErrorJustComplete())
         
         let output = viewModel.transform(input: input)
-        output.initial.drive().disposed(by: disposeBag)
         output.back.drive().disposed(by: disposeBag)
-        output.updateUser.drive().disposed(by: disposeBag)
         output.takePhoto.drive().disposed(by: disposeBag)
         output.editProfile.drive().disposed(by: disposeBag)
         output.changePassword.drive().disposed(by: disposeBag)
@@ -80,14 +74,13 @@ class ProfileViewController: UITableViewController {
         output.user.drive(userBinding).disposed(by: disposeBag)
         output.image.drive(imageBinding).disposed(by: disposeBag)
         output.imageUrl.drive(imageUrlBinding).disposed(by: disposeBag)
-        output.deleteOldPhoto.drive(completedBinding).disposed(by: disposeBag)
+        output.updateUser.drive(completedBinding).disposed(by: disposeBag)
         output.error.drive(errorBinding).disposed(by: disposeBag)
         output.activityIndicator.drive().disposed(by: disposeBag)
     }
     
     var imageBinding: Binder<UIImage> {
         return Binder(self, binding: { (vc, image) in
-            vc.image = image
             vc.profileImageView.image = image
             vc.hud.textLabel.text = "Uploading user photo..."
             vc.hud.show(in: self.view)
@@ -96,13 +89,7 @@ class ProfileViewController: UITableViewController {
     
     var userBinding: Binder<User> {
         return Binder(self, binding: { (vc, user) in
-            vc.profileImageView.kf.setImage(with: URL(string: user.photoUrl),
-                                            placeholder: vc.image,
-                                            options: nil,
-                                            progressBlock: nil,
-                                            completionHandler: { [unowned self] (image, error, cacheType, url) in
-                                                self.image = image
-            })
+            vc.profileImageView.imageUrl = user.photoUrl
             vc.nameLabel.text = user.username
             vc.emailLabel.text = user.email
         })
@@ -182,6 +169,10 @@ extension ProfileViewController {
         else {
             return 30
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44.0
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

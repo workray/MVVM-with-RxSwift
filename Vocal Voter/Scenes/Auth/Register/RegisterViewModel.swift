@@ -15,25 +15,28 @@ final class RegisterViewModel: ViewModelType {
     private let userUseCase: UserUseCase
     private let navigator: RegisterNavigator
     private let imageSubject = PublishSubject<UIImage>()
-    private var profile: Profile
+    private let profile: Profile
     
     init(useCase: UserUseCase, navigator: RegisterNavigator) {
         self.userUseCase = useCase
         self.navigator = navigator
-        
-        if (AppManager.sharedInstance().profile == nil) {
-            self.profile = Profile()
-        }
-        else {
-            self.profile = AppManager.sharedInstance().profile!
-        }
+        self.profile = AuthProfileManager.getProfile()
     }
     
     func transform(input: Input) -> Output {
+        let activityIndicator = ActivityIndicator()
+        let activity = activityIndicator.asDriver()
+        
         let back = input.backTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: navigator.back)
         
         let photo = input.photoTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: { [unowned self] in
                 self.navigator.toTakePhoto(self.imageSubject)
             })
@@ -44,45 +47,48 @@ final class RegisterViewModel: ViewModelType {
                                            input.email,
                                            input.password,
                                            input.phoneNumber,
-                                           input.zipcode,
-                                           image) {
-                                            return ($0, $1, $2, $3.password(), $4, $5, $6)
+                                           input.zipcode) {
+                                            return ($0, $1, $2, $3.password(), $4, $5)
         }
-        let profile = Driver.combineLatest(Driver.just(self.profile), fields) { (profile, fields) -> Profile in
+        let profile1 = Driver.combineLatest(Driver.just(self.profile), fields) { (profile, fields) -> Profile in
             let user = User(uid: profile.user.uid,
-                            firstname: fields.0,
-                            lastname: fields.1,
-                            email: fields.2,
-                            password: fields.3,
-                            phone: fields.4,
-                            zipcode: fields.5,
-                            photoUrl: profile.user.photoUrl,
-                            verificationUrl: profile.user.verificationUrl,
-                            verified: profile.user.verified)
-            
-            let profile = Profile(user: user, userPhoto: fields.6, verificationPhoto: profile.verificationPhoto)
-            AppManager.sharedInstance().profile = profile
-            return profile
+                                     firstname: fields.0,
+                                     lastname: fields.1,
+                                     email: fields.2,
+                                     password: fields.3,
+                                     phone: fields.4,
+                                     zipcode: fields.5,
+                                     photoUrl: profile.user.photoUrl,
+                                     verificationUrl: profile.user.verificationUrl,
+                                     verified: profile.user.verified)
+            let newProfile = Profile(user: user, userPhoto: profile.userPhoto, verificationPhoto: profile.verificationPhoto)
+            AuthProfileManager.getProfilePublishSubject().onNext(newProfile)
+            return newProfile
+        }
+        let profile = Driver.combineLatest(profile1, image) { (profile, image) -> Profile in
+            let newProfile = Profile(user: profile.user, userPhoto: image, verificationPhoto: profile.verificationPhoto)
+            AuthProfileManager.getProfilePublishSubject().onNext(newProfile)
+            return newProfile
         }.startWith(self.profile)
         
-        let activityIndicator = ActivityIndicator()
         let errorTracker = ErrorTracker()
         let checkUser = input.continueTrigger
-            .filter({ (valid) -> Bool in
-                return valid
-            })
+            .filter{ $0 }
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .withLatestFrom(profile)
             .map{ (profile) in
                 return CheckUser(email: profile.user.email, phone: profile.user.phone)
             }
-            .flatMapLatest({ (user) -> SharedSequence<DriverSharingStrategy, [User]> in
+            .flatMapLatest({ (user) -> SharedSequence<DriverSharingStrategy, Bool> in
                 return self.userUseCase.checkUser(user: user)
                     .trackActivity(activityIndicator)
                     .trackError(errorTracker)
                     .asDriverOnErrorJustComplete()
             })
         let next = checkUser
-            .filter{ $0.count == 0 }
+            .filter{ $0 }
             .flatMapLatest { [unowned self] _ in
                 return Driver.just(self.navigator.toContinue())
             }
@@ -117,7 +123,7 @@ extension RegisterViewModel {
         let photo: Driver<Void>
         let profile: Driver<Profile>
         let next: Driver<Void>
-        let checkUser: Driver<[User]>
+        let checkUser: Driver<Bool>
         let error: Driver<Error>
         let activityIndicator: Driver<Bool>
     }

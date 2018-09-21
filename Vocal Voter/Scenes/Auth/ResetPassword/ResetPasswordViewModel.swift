@@ -23,17 +23,25 @@ final class ResetPasswordViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
+        let activityIndicator = ActivityIndicator()
+        let activity = activityIndicator.asDriver()
+        
         let back = input.backTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: navigator.back)
         
         let param = Driver.combineLatest(Driver.just(self.param), input.password) { (param, password) -> ForgotPassword in
             return ForgotPassword(email: param.email, verificationCode: param.verificationCode, newPassword: password.password())
         }.startWith(self.param)
         
-        let activityIndicator = ActivityIndicator()
         let errorTracker = ErrorTracker()
         let resetPassword = input.resetPasswordTrigger
             .filter{ $0 }
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .withLatestFrom(param)
             .flatMapLatest { [unowned self] in
                 return self.useCase.resetPassword(params: $0)
@@ -43,8 +51,9 @@ final class ResetPasswordViewModel: ViewModelType {
         }
         let next = resetPassword
             .filter{$0.result == SUCCESS}
+            .mapToVoid()
             .debounce(3)
-            .flatMapLatest({ (_) -> SharedSequence<DriverSharingStrategy, Void> in
+            .flatMapLatest({ () -> SharedSequence<DriverSharingStrategy, Void> in
                 return Driver.just(self.navigator.toLogin())
             })
         return Output(back: back,

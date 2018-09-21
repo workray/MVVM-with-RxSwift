@@ -28,9 +28,13 @@ final class LoginViewModel: ViewModelType {
         }
         let activityIndicator = ActivityIndicator()
         let errorTracker = ErrorTracker()
+        let activity = activityIndicator.asDriver()
         
         let login = input.loginTrigger
-            .filter { $0 }
+            .filter{ $0 }
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .withLatestFrom(emailAndPassword)
             .map{ (email, password) in
                 return Login(email: email, password: password)
@@ -47,16 +51,23 @@ final class LoginViewModel: ViewModelType {
             return count
         })
             .flatMapLatest { [unowned self] (users) -> SharedSequence<DriverSharingStrategy, ()> in
-                AppManager.sharedInstance().profile = Profile(user: users.first!)
+                AuthProfileManager.getProfilePublishSubject().onNext(Profile())
+                AppManager.setCurrentUser(user: users.first!)
                 return Driver.just(self.navigator.toHome())
         }
         
         let forgotPassword = input.forgotPasswordTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .flatMapLatest{ [unowned self] in
                 return Driver.just(self.navigator.toForgotPassword())
         }
         
         let signup = input.signupTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .flatMapLatest{ [unowned self] in
                 return Driver.just(self.navigator.toRegister())
             }

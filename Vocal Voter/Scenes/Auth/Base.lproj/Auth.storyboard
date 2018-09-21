@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -81,7 +81,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3it-2z-PeF" customClass="RaisedButton" customModule="Material">
-                                <rect key="frame" x="172" y="617" width="30" height="30"/>
+                                <rect key="frame" x="172.5" y="617" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="X76-nO-0xn"/>
                                 </constraints>
@@ -180,7 +180,7 @@
                                                         <rect key="frame" x="137.5" y="0.0" width="100" height="100"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KeC-js-0Vf">
-                                                                <rect key="frame" x="16" y="28" width="68" height="45"/>
+                                                                <rect key="frame" x="16" y="27.5" width="68" height="45"/>
                                                                 <subviews>
                                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_lock_white" translatesAutoresizingMaskIntoConstraints="NO" id="24C-o0-tct">
                                                                         <rect key="frame" x="22" y="0.0" width="24" height="24"/>
@@ -202,6 +202,10 @@
                                                                     <constraint firstAttribute="bottom" secondItem="zXx-Wj-F1f" secondAttribute="bottom" id="wyG-mQ-k9E"/>
                                                                 </constraints>
                                                             </view>
+                                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4P9-nW-mng" customClass="ImageView" customModule="Vocal_Voter" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                                <color key="backgroundColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </view>
                                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C5s-X3-v0m" customClass="RaisedButton" customModule="Material">
                                                                 <rect key="frame" x="26.5" y="35" width="46" height="30"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -215,19 +219,16 @@
                                                                     </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
                                                             </button>
-                                                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MpU-fp-tjH" customClass="CircleImageView" customModule="Vocal_Voter" customModuleProvider="target">
-                                                                <rect key="frame" x="-0.5" y="0.0" width="100" height="100"/>
-                                                            </imageView>
                                                         </subviews>
                                                         <color key="backgroundColor" white="0.45000000000000001" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstItem="KeC-js-0Vf" firstAttribute="centerY" secondItem="b2u-ud-gxf" secondAttribute="centerY" id="1nv-XC-n0l"/>
                                                             <constraint firstItem="KeC-js-0Vf" firstAttribute="centerX" secondItem="b2u-ud-gxf" secondAttribute="centerX" id="5B8-bI-59o"/>
-                                                            <constraint firstAttribute="trailing" secondItem="MpU-fp-tjH" secondAttribute="trailing" id="BO3-AT-xgj"/>
+                                                            <constraint firstItem="4P9-nW-mng" firstAttribute="leading" secondItem="b2u-ud-gxf" secondAttribute="leading" id="KgV-we-OBN"/>
                                                             <constraint firstAttribute="height" constant="100" id="Xn8-Gm-S6h"/>
-                                                            <constraint firstAttribute="bottom" secondItem="MpU-fp-tjH" secondAttribute="bottom" id="b2h-8M-x6M"/>
-                                                            <constraint firstItem="MpU-fp-tjH" firstAttribute="leading" secondItem="b2u-ud-gxf" secondAttribute="leading" id="ct2-xg-rtZ"/>
-                                                            <constraint firstItem="MpU-fp-tjH" firstAttribute="top" secondItem="b2u-ud-gxf" secondAttribute="top" id="plq-J8-kCi"/>
+                                                            <constraint firstItem="4P9-nW-mng" firstAttribute="top" secondItem="b2u-ud-gxf" secondAttribute="top" id="teV-MO-IxZ"/>
+                                                            <constraint firstAttribute="trailing" secondItem="4P9-nW-mng" secondAttribute="trailing" id="tkW-PB-piB"/>
+                                                            <constraint firstAttribute="bottom" secondItem="4P9-nW-mng" secondAttribute="bottom" id="u3q-Tm-vl6"/>
                                                             <constraint firstAttribute="width" constant="100" id="vlJ-Js-Pmm"/>
                                                         </constraints>
                                                     </view>
@@ -384,7 +385,7 @@
                         <outlet property="emailTextField" destination="Xty-nF-Jez" id="7LY-Vo-Rdg"/>
                         <outlet property="firstnameTextField" destination="101-dq-jM0" id="tXL-xs-GeO"/>
                         <outlet property="imageButton" destination="C5s-X3-v0m" id="wgI-u3-3sx"/>
-                        <outlet property="imageView" destination="MpU-fp-tjH" id="B8n-Hu-WjE"/>
+                        <outlet property="imageView" destination="4P9-nW-mng" id="Fff-Q1-huU"/>
                         <outlet property="lastnameTextField" destination="jfT-fT-nAT" id="9rM-eZ-i8g"/>
                         <outlet property="passwordTextField" destination="Ono-R7-u5O" id="Gsw-IJ-I1h"/>
                         <outlet property="phoneTextField" destination="dLX-JW-q2K" id="nUc-t0-0xK"/>
@@ -443,7 +444,7 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Verification Photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kDz-M0-s7G">
-                                <rect key="frame" x="105" y="30" width="165" height="27.5"/>
+                                <rect key="frame" x="105" y="29.5" width="165" height="27.5"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="20"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -511,7 +512,7 @@
                                 <rect key="frame" x="24" y="84" width="327" height="563"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_forgot_password" translatesAutoresizingMaskIntoConstraints="NO" id="mWh-Ry-0bj">
-                                        <rect key="frame" x="143" y="0.0" width="40" height="40"/>
+                                        <rect key="frame" x="143.5" y="0.0" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="NDE-jB-pUo"/>
                                             <constraint firstAttribute="width" constant="40" id="rGE-J3-aXU"/>
@@ -524,7 +525,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We will send a verification code to your registered email address." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="C5H-zq-DC1">
-                                        <rect key="frame" x="17" y="97" width="294" height="33.5"/>
+                                        <rect key="frame" x="16" y="97" width="295" height="33.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -1022,7 +1023,7 @@
                                 <rect key="frame" x="24" y="84" width="327" height="563"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_reset_password" translatesAutoresizingMaskIntoConstraints="NO" id="4Cn-Sf-9Wg">
-                                        <rect key="frame" x="143" y="0.0" width="40" height="40"/>
+                                        <rect key="frame" x="143.5" y="0.0" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="Pq8-Vd-nEU"/>
                                             <constraint firstAttribute="width" constant="40" id="uDU-ql-j5T"/>
@@ -1035,7 +1036,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter a new password that is at least 6 characters in length." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="R7U-45-usu">
-                                        <rect key="frame" x="16" y="97" width="295.5" height="33.5"/>
+                                        <rect key="frame" x="16" y="97" width="295" height="33.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>

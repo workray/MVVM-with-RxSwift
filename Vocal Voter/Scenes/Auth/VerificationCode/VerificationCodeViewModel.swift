@@ -23,7 +23,13 @@ final class VerificationCodeViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
+        let activityIndicator = ActivityIndicator()
+        let activity = activityIndicator.asDriver()
+        
         let back = input.backTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: navigator.back)
         
         let verificationCode = Driver.combineLatest(input.verificationCode1,
@@ -35,12 +41,8 @@ final class VerificationCodeViewModel: ViewModelType {
                                                         return ($0, $1, $2, $3, $4, $5)
         }
         
-        let activityIndicator = ActivityIndicator()
-        
-        let canSubmit = Driver.combineLatest(verificationCode, activityIndicator.asDriver()) { (codes, indicator)  -> Bool in
-            print(codes)
+        let canSubmit = Driver.combineLatest(verificationCode, activity) { (codes, indicator)  -> Bool in
             return !codes.0.isEmpty && !codes.1.isEmpty && !codes.2.isEmpty && !codes.3.isEmpty && !codes.4.isEmpty && !codes.5.isEmpty && !indicator
-//            return !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty && !$0.4.isEmpty && !$0.5.isEmpty && !$1
         }
         
         let param = Driver.combineLatest(Driver.just(self.param), verificationCode) { (param, verificationCode) -> ForgotPassword in
@@ -49,6 +51,9 @@ final class VerificationCodeViewModel: ViewModelType {
         
         let errorTracker = ErrorTracker()
         let submit = input.submitTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .withLatestFrom(param)
             .flatMapLatest { [unowned self] in
                 return self.useCase.sendVerificationCode(params: $0)
@@ -64,7 +69,11 @@ final class VerificationCodeViewModel: ViewModelType {
                 return Driver.just(self.navigator.toResetPassword(param: $0))
         }
         
-        let resend = input.resendTrigger.withLatestFrom(Driver.just(self.param.email))
+        let resend = input.resendTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
+            .withLatestFrom(Driver.just(self.param.email))
             .flatMapLatest { [unowned self] in
                 return self.useCase.sendEmail(params: ForgotPassword(email: $0))
                     .trackActivity(activityIndicator)

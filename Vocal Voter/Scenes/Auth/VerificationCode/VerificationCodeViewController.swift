@@ -30,7 +30,7 @@ class VerificationCodeViewController: AuthBackgroundViewController {
     @IBOutlet weak var submitButton: RaisedButton!
     @IBOutlet weak var resendButton: RaisedButton!
     
-    let hud = JGProgressHUD(style: .dark)
+    let hud = UIViewController.getHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()

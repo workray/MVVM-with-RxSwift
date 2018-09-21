@@ -24,7 +24,7 @@ class ResetPasswordViewController: AuthBackgroundViewController {
     @IBOutlet weak var confirmPasswordTextField: VocalVoterTextField!
     @IBOutlet weak var resetPasswordButton: RaisedButton!
     
-    let hud = JGProgressHUD(style: .dark)
+    let hud = UIViewController.getHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()

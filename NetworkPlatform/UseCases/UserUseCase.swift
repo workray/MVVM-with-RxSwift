@@ -23,8 +23,24 @@ final class UserUseCase<Cache>: Domain.UserUseCase where Cache: AbstractCache, C
         return network.getUsers(query: NSPredicate(format: "email == %@ AND password == %@", argumentArray: [login.email, login.password]))
     }
     
-    func checkUser(user: CheckUser) -> Observable<[User]> {
-        return network.getUsers(query: NSPredicate(format: "email == %@ OR phone == %@", argumentArray: [user.email, user.phone]))
+    func checkUser(user: CheckUser) -> Observable<Bool> {
+        return checkUser(user: user, uid: "")
+    }
+    
+    func checkUser(user: CheckUser, uid: String) -> Observable<Bool> {
+        return network
+            .getUsers(query: NSPredicate(format: "email == %@ OR phone == %@", argumentArray: [user.email, user.phone]))
+            .map({ (users) -> Bool in
+                if uid.isEmpty && users.count == 0 {
+                    return true
+                }
+                else if !uid.isEmpty && users.count == 1 && users[0].uid == uid {
+                    return true
+                }
+                else {
+                    return false
+                }
+            })
     }
     
     func user(userId: String) -> Observable<User> {

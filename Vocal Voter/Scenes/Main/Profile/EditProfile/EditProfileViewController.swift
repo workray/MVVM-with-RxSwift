@@ -27,7 +27,7 @@ class EditProfileViewController: UIViewController {
     @IBOutlet weak var phoneTextField: VocalVoterTextField!
     @IBOutlet weak var zipcodeTextField: VocalVoterTextField!
     
-    let hud = JGProgressHUD(style: .dark)
+    let hud = UIViewController.getHUD()
     var profile: UserProfile!
     
     override func viewDidLoad() {
@@ -53,7 +53,6 @@ class EditProfileViewController: UIViewController {
         let doneTrigger = doneButton.rx.tap.flatMap { [unowned self] in
             return Driver.just(self.validContinue())
         }
-        let validTrigger = Driver.just(self.validContinue())
         let input = EditProfileViewModel.Input(
                                             backTrigger: backButton.rx.tap.asDriver(),
                                             doneTrigger: doneTrigger.asDriverOnErrorJustComplete(),
@@ -61,8 +60,7 @@ class EditProfileViewController: UIViewController {
                                             lastName: lastnameTextField.rx.text.orEmpty.asDriver(),
                                             email: emailTextField.rx.text.orEmpty.asDriver(),
                                             phoneNumber: phoneTextField.rx.text.orEmpty.asDriver(),
-                                            zipcode: zipcodeTextField.rx.text.orEmpty.asDriver(),
-                                            valid: validTrigger)
+                                            zipcode: zipcodeTextField.rx.text.orEmpty.asDriver())
         let output = viewModel.transform(input: input)
         
         output.back.drive().disposed(by: disposeBag)
@@ -136,6 +134,9 @@ extension EditProfileViewController {
         valid = emailTextField.isValid && valid
         valid = phoneTextField.isValid && valid
         valid = zipcodeTextField.isValid && valid
+        if !valid {
+            showErrorMsg("All required fields must be completed!")
+        }
         return valid
     }
     fileprivate func prepareFirstName() {

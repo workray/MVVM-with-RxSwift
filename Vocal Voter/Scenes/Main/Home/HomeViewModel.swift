@@ -24,7 +24,10 @@ final class HomeViewModel: ViewModelType {
         let profile = input.profileTrigger
             .do(onNext: navigator.toProfile)
         let logout = input.logoutTrigger
-            .do(onNext: navigator.toLogin)
+            .do(onNext: {[unowned self] () in
+                AppManager.loggedOut()
+                self.navigator.toLogin()
+            })
         return Output(
             profile: profile,
             logout: logout)

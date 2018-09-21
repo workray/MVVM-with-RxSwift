@@ -23,8 +23,16 @@ final class EditProfileViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
+        let activityIndicator = ActivityIndicator()
+        let activity = activityIndicator.asDriver()
+        
         let back = input.backTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: navigator.back)
+        
+        let uid = self.profile.uid
         
         let profileSubject = PublishSubject<UserProfile>.init()
         let profile = profileSubject.asDriverOnErrorJustComplete()
@@ -41,7 +49,7 @@ final class EditProfileViewModel: ViewModelType {
                                             return ($0, $1, $2, $3, $4)
         }
         
-        let updateProfile = Driver.combineLatest(Driver.just(self.profile.uid), fields) { (uid, fields) -> UserProfile in
+        let updateProfile = Driver.combineLatest(Driver.just(uid), fields) { (uid, fields) -> UserProfile in
                 return UserProfile(uid: uid,
                             firstname: fields.0,
                             lastname: fields.1,
@@ -51,12 +59,16 @@ final class EditProfileViewModel: ViewModelType {
             }
             .startWith(self.profile)
         
-        let activityIndicator = ActivityIndicator()
-        let valid = Driver.combineLatest(profile, updateProfile, input.valid, activityIndicator.asDriver()) {
-            return !($0 == $1) && $2 && !$3
+        
+        let valid = Driver.combineLatest(profile, updateProfile, activity) {
+            return !($0 == $1) && !$2
         }
         
-        let done = input.doneTrigger.filter{ $0 }.mapToVoid()
+        let done = input.doneTrigger
+            .filter{ $0 }
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
         
         let errorTracker = ErrorTracker()
         let checkUser = done
@@ -68,18 +80,10 @@ final class EditProfileViewModel: ViewModelType {
                 if user.email == self.profile.email && user.phone == self.profile.phone {
                     return SharedSequence.just(true)
                 }
-                return self.userUseCase.checkUser(user: user)
+                return self.userUseCase.checkUser(user: user, uid: uid)
                     .trackActivity(activityIndicator)
                     .trackError(errorTracker)
                     .asDriverOnErrorJustComplete()
-                    .map({ [unowned self] (users) -> Bool in
-                        if users.count == 1 && users[0].uid == self.profile.uid {
-                            return true
-                        }
-                        else {
-                            return false
-                        }
-                    })
             })
         let update = checkUser
             .filter{ $0 }
@@ -90,8 +94,8 @@ final class EditProfileViewModel: ViewModelType {
                     .trackError(errorTracker)
                     .asDriverOnErrorJustComplete()
                     .do(onNext: {(user) in
+                        AppManager.getUserPublishSubject().onNext(user)
                         profileSubject.onNext(UserProfile(user: user))
-                        AppManager.sharedInstance().profile?.user = user
                     })
         }.mapToVoid()
         
@@ -118,7 +122,6 @@ extension EditProfileViewModel {
         let email: Driver<String>
         let phoneNumber: Driver<String>
         let zipcode: Driver<String>
-        let valid: Driver<Bool>
     }
     
     struct Output {

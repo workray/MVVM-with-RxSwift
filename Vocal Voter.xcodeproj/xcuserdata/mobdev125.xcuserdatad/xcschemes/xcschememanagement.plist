@@ -7,7 +7,7 @@
 		<key>Domain.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>29</integer>
+			<integer>28</integer>
 		</dict>
 		<key>NetworkPlatform.xcscheme</key>
 		<dict>
@@ -17,7 +17,7 @@
 		<key>Vocal Voter.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>28</integer>
+			<integer>29</integer>
 		</dict>
 	</dict>
 </dict>

@@ -83,8 +83,8 @@ open class SwiftyCamButton: UIButton {
         guard buttonEnabled == true else {
             return
         }
-        
-       delegate?.buttonWasTapped()
+        buttonEnabled = false
+        delegate?.buttonWasTapped()
     }
     
     /// UILongPressGestureRecognizer Function

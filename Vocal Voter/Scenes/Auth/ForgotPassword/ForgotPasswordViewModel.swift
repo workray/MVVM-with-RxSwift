@@ -21,17 +21,28 @@ final class ForgotPasswordViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
+        let activityIndicator = ActivityIndicator()
+        let activity = activityIndicator.asDriver()
+        
         let back = input.backTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: navigator.toLogin)
         let register = input.registerTrigger
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .do(onNext: navigator.toRegister)
         
         let param = input.email.map { ForgotPassword(email: $0) }
         
-        let activityIndicator = ActivityIndicator()
         let errorTracker = ErrorTracker()
         let sendEmail = input.sendEmailTrigger
             .filter{ $0 }
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .withLatestFrom(param)
             .flatMapLatest { [unowned self] in
                 return self.useCase.sendEmail(params: $0)
@@ -47,6 +58,9 @@ final class ForgotPasswordViewModel: ViewModelType {
         }
         let haveAlreadyVerificationCode = input.haveAlreadyVerificationCodeTrigger
             .filter{ $0 }
+            .withLatestFrom(activity)
+            .filter{ !$0 }
+            .mapToVoid()
             .withLatestFrom(param)
             .flatMapLatest { [unowned self] in
                 return Driver.just(self.navigator.toVerificationCode(params: $0))
