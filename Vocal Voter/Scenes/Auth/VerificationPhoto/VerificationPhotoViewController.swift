@@ -23,7 +23,7 @@ class VerificationPhotoViewController: ImageViewController {
     @IBOutlet weak var backButton: BackButton!
     @IBOutlet weak var imageButton: RaisedButton!
     @IBOutlet weak var doneButton: RaisedButton!
-    @IBOutlet weak var contentView: UIView!
+//    @IBOutlet weak var contentView: UIView!
     
     let hud = UIViewController.getHUD()
     
@@ -91,6 +91,6 @@ class VerificationPhotoViewController: ImageViewController {
     }
     
     override func getContentView() -> UIView {
-        return self.contentView
+        return self.view
     }
 }

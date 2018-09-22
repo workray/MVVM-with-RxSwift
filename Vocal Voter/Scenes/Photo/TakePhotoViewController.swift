@@ -118,19 +118,6 @@ extension TakePhotoViewController {
             self.present(imagePickerController, animated: true, completion: nil)
         }
     }
-    fileprivate func hideButtons() {
-        UIView.animate(withDuration: 0.25) {
-            self.flashButton.alpha = 0.0
-            self.flipCameraButton.alpha = 0.0
-        }
-    }
-    
-    fileprivate func showButtons() {
-        UIView.animate(withDuration: 0.25) {
-            self.flashButton.alpha = 1.0
-            self.flipCameraButton.alpha = 1.0
-        }
-    }
     
     fileprivate func focusAnimationAt(_ point: CGPoint) {
         let focusView = UIImageView(image: #imageLiteral(resourceName: "focus"))

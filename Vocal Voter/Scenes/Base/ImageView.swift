@@ -10,19 +10,19 @@ import UIKit
 import Kingfisher
 
 protocol ImageViewDelegate {
-    func didLoadedImage()
+    func didLoadedImage(_ image: UIImage)
 }
-class ImageView: UIView {
+class ImageView: UIImageView {
 
     var delegate: ImageViewDelegate?
     
-    lazy var imageView: UIImageView = {
-        let view = UIImageView(frame: self.bounds)
-        view.backgroundColor = .clear
-        view.contentMode = .scaleAspectFill
-        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]        
-        return view
-    }()
+//    lazy var imageView: UIImageView = {
+//        let view = UIImageView(frame: self.bounds)
+//        view.backgroundColor = .clear
+//        view.contentMode = .scaleAspectFill
+//        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        return view
+//    }()
     
     lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.white)
@@ -39,31 +39,31 @@ class ImageView: UIView {
         }
     }
     
-    override var contentMode: UIView.ContentMode {
-        get {
-            return imageView.contentMode
-        }
-        set {
-            imageView.contentMode = newValue
-        }
-    }
+//    override var contentMode: UIView.ContentMode {
+//        get {
+//            return imageView.contentMode
+//        }
+//        set {
+//            imageView.contentMode = newValue
+//        }
+//    }
     
-    var image: UIImage? {
-        get {
-            return imageView.image
-        }
-        set {
+    override var image: UIImage? {
+        didSet {
             if let task = imageTask {
                 task.cancel()
                 imageTask = nil
             }
-            imageView.image = newValue
             self.isHidden = false
             self.activityIndicator.isHidden = true
             self.activityIndicator.stopAnimating()
             
+            guard let newImage = self.image else {
+                return
+            }
+            
             if delegate != nil {
-                delegate?.didLoadedImage()
+                delegate?.didLoadedImage(newImage)
             }
         }
     }
@@ -79,15 +79,12 @@ class ImageView: UIView {
             self.isHidden = false
             activityIndicator.startAnimating()
             activityIndicator.isHidden = false
-            imageTask = imageView.kf.setImage(with: URL(string: url), placeholder: self.image, options: nil, progressBlock: nil) {[unowned self] (image, error, cacheType, url) in
+            imageTask = self.kf.setImage(with: URL(string: url), placeholder: self.image, options: nil, progressBlock: nil) {[unowned self] (image, error, cacheType, url) in
                 self.imageTask = nil
                 self.activityIndicator.isHidden = true
                 self.activityIndicator.stopAnimating()
-                if error != nil {
-                    self.image = image
-                    if self.delegate != nil {
-                        self.delegate?.didLoadedImage()
-                    }
+                if error != nil, let newImage = image {
+                    self.image = newImage
                 }
             }
         }
@@ -105,9 +102,9 @@ class ImageView: UIView {
     }
     
     private func prepareLayout() {
-        self.addSubview(imageView)
         self.addSubview(activityIndicator)
         
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         activityIndicator.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         

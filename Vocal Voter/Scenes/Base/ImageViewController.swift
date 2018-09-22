@@ -68,6 +68,13 @@ class ImageViewController: UIViewController {
         
         self.zoomingScrollView.zoom(to: rectToZoomTo, animated: true)
     }
+    
+    @objc func tapAction(recognizer: UITapGestureRecognizer) {
+        guard let nav = self.navigationController else {
+            return
+        }
+        nav.isNavigationBarHidden = !nav.isNavigationBarHidden
+    }
 
     func getContentView() -> UIView {
         
@@ -80,11 +87,15 @@ class ImageViewController: UIViewController {
         self.view.backgroundColor = .black
         
         self.zoomingScrollView.addSubview(self.imageView)
-        self.getContentView().addSubview(self.zoomingScrollView)
+        self.getContentView().insertSubview(self.zoomingScrollView, at: 0)
         
-        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(VerificationPhotoViewController.doubleTapAction))
+        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTapAction))
         doubleTapRecognizer.numberOfTapsRequired = 2
         self.zoomingScrollView.addGestureRecognizer(doubleTapRecognizer)
+        
+//        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapAction))
+//        tapRecognizer.numberOfTapsRequired = 1
+//        self.zoomingScrollView.addGestureRecognizer(tapRecognizer)
     }
 }
 
@@ -96,7 +107,7 @@ extension ImageViewController: UIScrollViewDelegate {
 }
 
 extension ImageViewController: ImageViewDelegate {
-    func didLoadedImage() {
+    func didLoadedImage(_ image: UIImage) {
         self.zoomingScrollView.maximumZoomScale = self.maxZoomScale()
     }
 }

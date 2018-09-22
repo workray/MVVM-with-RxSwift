@@ -29,6 +29,7 @@
 		1E3E8D4B21547773007D050C /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3E8D4A21547773007D050C /* ImageView.swift */; };
 		1E3E8D4E2154BD8D007D050C /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3E8D4D2154BD8D007D050C /* ImageViewController.swift */; };
 		1E3E8D502154C8EE007D050C /* AuthProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3E8D4F2154C8EE007D050C /* AuthProfileManager.swift */; };
+		1E413D5521551786002624E1 /* CameraPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E413D5421551786002624E1 /* CameraPreviewViewController.swift */; };
 		1E8094A2213D75B40052F8BB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E8094A1213D75B40052F8BB /* AppDelegate.swift */; };
 		1E8094A9213D75BE0052F8BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E8094A8213D75BE0052F8BB /* Assets.xcassets */; };
 		1E8094AC213D75BF0052F8BB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E8094AA213D75BF0052F8BB /* LaunchScreen.storyboard */; };
@@ -179,6 +180,7 @@
 		1E3E8D4A21547773007D050C /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		1E3E8D4D2154BD8D007D050C /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		1E3E8D4F2154C8EE007D050C /* AuthProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProfileManager.swift; sourceTree = "<group>"; };
+		1E413D5421551786002624E1 /* CameraPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewViewController.swift; sourceTree = "<group>"; };
 		1E80949E213D75B40052F8BB /* Vocal Voter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vocal Voter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E8094A1213D75B40052F8BB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E8094A8213D75BE0052F8BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -348,6 +350,11 @@
 			children = (
 				1E3E8D4D2154BD8D007D050C /* ImageViewController.swift */,
 				1E8194EA214A47FD000E6222 /* AuthBackgroundViewController.swift */,
+				1EBE86432140A7CB00780249 /* IconImage.swift */,
+				1EBE86452140A91300780249 /* VocalVoterTextField.swift */,
+				1EBE86512140D18D00780249 /* CircleImageView.swift */,
+				1EBE86532140D30A00780249 /* CircleView.swift */,
+				1E3E8D4A21547773007D050C /* ImageView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -428,15 +435,10 @@
 				1E8094EE213F2C880052F8BB /* ErrorTracker.swift */,
 				1E8094EF213F2C880052F8BB /* Observable+Ext.swift */,
 				1E8094F0213F2C880052F8BB /* Reusable.swift */,
-				1EBE86432140A7CB00780249 /* IconImage.swift */,
-				1EBE86452140A91300780249 /* VocalVoterTextField.swift */,
 				1EBE86472140AA0C00780249 /* UIViewController+Ext.swift */,
-				1EBE86512140D18D00780249 /* CircleImageView.swift */,
-				1EBE86532140D30A00780249 /* CircleView.swift */,
 				1E8194E8214A2138000E6222 /* String+Ext.swift */,
 				1E81950C214BF956000E6222 /* VerificationCodeTextField.swift */,
 				1E3E8D2E215273AD007D050C /* UITableViewController+Ext.swift */,
-				1E3E8D4A21547773007D050C /* ImageView.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -686,6 +688,7 @@
 				1EBE868921415C2B00780249 /* TakePhotoNavigator.swift */,
 				1EBE868B21415C3A00780249 /* TakePhotoViewModel.swift */,
 				1EBE86682140F2A800780249 /* CropAvatarPhotoViewController.swift */,
+				1E413D5421551786002624E1 /* CameraPreviewViewController.swift */,
 			);
 			path = Photo;
 			sourceTree = "<group>";
@@ -1041,6 +1044,7 @@
 				1EBE8677214128BA00780249 /* SwiftyRecordButton.swift in Sources */,
 				1EBE8671214128AB00780249 /* SwiftyCamButton.swift in Sources */,
 				1E819503214A7D8E000E6222 /* ResetPasswordViewController.swift in Sources */,
+				1E413D5521551786002624E1 /* CameraPreviewViewController.swift in Sources */,
 				1EBE86542140D30A00780249 /* CircleView.swift in Sources */,
 				1EBE868A21415C2B00780249 /* TakePhotoNavigator.swift in Sources */,
 				1E3E8D502154C8EE007D050C /* AuthProfileManager.swift in Sources */,

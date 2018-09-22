@@ -81,10 +81,10 @@
                                                 <constraint firstItem="8Zv-MG-i82" firstAttribute="centerX" secondItem="ma1-4c-Y1h" secondAttribute="centerX" id="iGn-5c-n6a"/>
                                             </constraints>
                                         </view>
-                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ql8-7x-TUT" customClass="ImageView" customModule="Vocal_Voter" customModuleProvider="target">
+                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="INI-si-iu9" customClass="ImageView" customModule="Vocal_Voter" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <color key="backgroundColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </view>
+                                        </imageView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D8f-1s-05H" customClass="RaisedButton" customModule="Material">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -105,12 +105,12 @@
                                         <constraint firstAttribute="width" constant="100" id="Cvs-WV-4JH"/>
                                         <constraint firstItem="ma1-4c-Y1h" firstAttribute="centerY" secondItem="rDz-At-RHZ" secondAttribute="centerY" id="E4H-Rs-Vh6"/>
                                         <constraint firstItem="D8f-1s-05H" firstAttribute="top" secondItem="rDz-At-RHZ" secondAttribute="top" id="HxR-GX-jcv"/>
-                                        <constraint firstAttribute="bottom" secondItem="ql8-7x-TUT" secondAttribute="bottom" id="MDk-2W-ulB"/>
+                                        <constraint firstItem="INI-si-iu9" firstAttribute="leading" secondItem="rDz-At-RHZ" secondAttribute="leading" id="IgI-DP-X9q"/>
                                         <constraint firstItem="ma1-4c-Y1h" firstAttribute="centerX" secondItem="rDz-At-RHZ" secondAttribute="centerX" id="SHr-de-xqY"/>
-                                        <constraint firstItem="ql8-7x-TUT" firstAttribute="leading" secondItem="rDz-At-RHZ" secondAttribute="leading" id="UHR-wa-aU2"/>
-                                        <constraint firstItem="ql8-7x-TUT" firstAttribute="top" secondItem="rDz-At-RHZ" secondAttribute="top" id="YGa-Nm-ZaG"/>
+                                        <constraint firstAttribute="trailing" secondItem="INI-si-iu9" secondAttribute="trailing" id="aD9-Is-LMO"/>
                                         <constraint firstItem="D8f-1s-05H" firstAttribute="leading" secondItem="rDz-At-RHZ" secondAttribute="leading" id="ib7-RM-eI1"/>
-                                        <constraint firstAttribute="trailing" secondItem="ql8-7x-TUT" secondAttribute="trailing" id="rNk-ri-SE6"/>
+                                        <constraint firstItem="INI-si-iu9" firstAttribute="top" secondItem="rDz-At-RHZ" secondAttribute="top" id="lAo-Zn-kQc"/>
+                                        <constraint firstAttribute="bottom" secondItem="INI-si-iu9" secondAttribute="bottom" id="uS3-gR-8QM"/>
                                         <constraint firstAttribute="trailing" secondItem="D8f-1s-05H" secondAttribute="trailing" id="xho-8t-Ti8"/>
                                     </constraints>
                                 </view>
@@ -156,7 +156,7 @@
                         <outlet property="indicatorView" destination="ma1-4c-Y1h" id="7Dd-Ch-Ryx"/>
                         <outlet property="nameLabel" destination="k4l-um-fCv" id="dUf-gP-gm2"/>
                         <outlet property="profileImageButton" destination="D8f-1s-05H" id="LaN-Y3-NFE"/>
-                        <outlet property="profileImageView" destination="ql8-7x-TUT" id="0Gc-U0-Z6S"/>
+                        <outlet property="profileImageView" destination="INI-si-iu9" id="D4c-j5-71R"/>
                         <segue destination="lci-QY-jmI" kind="show" identifier="gotoEditProfile" id="s6h-5f-Wbm"/>
                         <segue destination="mgw-tE-rCA" kind="show" identifier="gotoChangePassword" id="STG-aL-noo"/>
                         <segue destination="Deh-Bt-CZJ" kind="show" identifier="gotoChangeVerificationPhoto" id="d5U-Go-8CK"/>
@@ -411,19 +411,7 @@
                     <view key="view" contentMode="scaleToFill" id="Fu1-T2-Wpb">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="saF-cl-jdL">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                        </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="lc9-mx-AGh" firstAttribute="bottom" secondItem="saF-cl-jdL" secondAttribute="bottom" id="0go-7Y-WKH"/>
-                            <constraint firstItem="saF-cl-jdL" firstAttribute="leading" secondItem="lc9-mx-AGh" secondAttribute="leading" id="6PA-6o-Mvj"/>
-                            <constraint firstItem="saF-cl-jdL" firstAttribute="trailing" secondItem="lc9-mx-AGh" secondAttribute="trailing" id="VlC-1f-oq9"/>
-                            <constraint firstItem="saF-cl-jdL" firstAttribute="top" secondItem="lc9-mx-AGh" secondAttribute="top" id="mel-xX-G0p"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="lc9-mx-AGh"/>
                     </view>
                     <navigationItem key="navigationItem" title="Change Verification Photo" id="r7N-5A-W4o">
@@ -432,7 +420,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="backButton" destination="Pqe-UN-ZFd" id="4Dm-O0-Oce"/>
-                        <outlet property="contentView" destination="saF-cl-jdL" id="hVq-ss-dFW"/>
                         <outlet property="takePhotoButton" destination="T9s-iG-ytA" id="GBE-4m-6Wx"/>
                     </connections>
                 </viewController>

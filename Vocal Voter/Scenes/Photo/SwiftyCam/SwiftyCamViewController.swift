@@ -156,7 +156,7 @@ open class SwiftyCamViewController: UIViewController {
     public var allowAutoRotate                = false
 
     /// Specifies the [videoGravity](https://developer.apple.com/reference/avfoundation/avcapturevideopreviewlayer/1386708-videogravity) for the preview layer.
-    public var videoGravity                   : SwiftyCamVideoGravity = .resizeAspectFill
+    public var videoGravity                   : SwiftyCamVideoGravity = .resizeAspect
 
     /// Sets whether or not video recordings will record audio
     /// Setting to true will prompt user for access to microphone on View Controller launch.
@@ -317,7 +317,8 @@ open class SwiftyCamViewController: UIViewController {
 
         layer.videoOrientation = orientation
 
-        previewLayer.frame = self.view.bounds
+//        previewLayer.frame = self.view.bounds
+//        previewLayer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
     }
 

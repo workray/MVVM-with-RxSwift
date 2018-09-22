@@ -23,7 +23,7 @@ class ChangeVerificationPhotoViewController: ImageViewController {
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var takePhotoButton: UIBarButtonItem!
     
-    @IBOutlet weak var contentView: UIView!
+    //@IBOutlet weak var contentView: UIView!
     
     let hud = UIViewController.getHUD()
     
@@ -37,7 +37,7 @@ class ChangeVerificationPhotoViewController: ImageViewController {
     }
     
     override func getContentView() -> UIView {
-        return self.contentView
+        return self.view
     }
     
     private func bindViewModel() {
